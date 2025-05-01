@@ -1,6 +1,9 @@
 // Game state
 const MAX_USERS = 500;
 const SAVE_KEY = "frenchWordGameUsers";
+const VOWELS = "aeiouy";
+const CONSONANTS = "bcdfghjklmnpqrstvwxz";
+const COMMON_ENDINGS = ["er", "ir", "re", "ez", "ons", "ent", "ais", "ait", "ant", "tion", "ment", "age", "ure", "oir", "eur"];
 
 let users = [];
 let userCount = 0;
@@ -54,14 +57,12 @@ const gameMessage = document.getElementById('game-message');
 const wordList = document.getElementById('word-list');
 const saveQuitBtn = document.getElementById('save-quit-btn');
 
-// Common French word endings that help form valid words
-const COMMON_ENDINGS = ["er", "ir", "re", "ez", "ons", "ent", "ais", "ait", "ant", "tion"];
-
 // Initialize the game
 function init() {
     loadUsers();
     setupEventListeners();
     initParticles();
+    initMatrix();
     showScreen('login');
 }
 
@@ -124,6 +125,21 @@ function setupEventListeners() {
     });
     
     saveQuitBtn.addEventListener('click', saveAndQuit);
+    
+    // Letter click events
+    lettersContainer.addEventListener('click', (e) => {
+        if (e.target.classList.contains('letter')) {
+            const letter = e.target.textContent.toLowerCase();
+            wordInput.value += letter;
+            wordInput.focus();
+            
+            // Add visual feedback
+            e.target.style.transform = 'scale(0.9)';
+            setTimeout(() => {
+                e.target.style.transform = '';
+            }, 100);
+        }
+    });
 }
 
 // Initialize particles.js
@@ -132,11 +148,11 @@ function initParticles() {
         particlesJS('particles-js', {
             particles: {
                 number: { value: 80, density: { enable: true, value_area: 800 } },
-                color: { value: "#4cc9f0" },
+                color: { value: "#7f5af0" },
                 shape: { type: "circle" },
                 opacity: { value: 0.5 },
                 size: { value: 3, random: true },
-                line_linked: { enable: true, distance: 150, color: "#4cc9f0", opacity: 0.4, width: 1 },
+                line_linked: { enable: true, distance: 150, color: "#7f5af0", opacity: 0.4, width: 1 },
                 move: { enable: true, speed: 2 }
             },
             interactivity: {
@@ -148,6 +164,49 @@ function initParticles() {
             }
         });
     }
+}
+
+// Initialize matrix rain effect
+function initMatrix() {
+    const canvas = document.getElementById('matrix-canvas');
+    if (!canvas) return;
+    
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    
+    const katakana = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッン';
+    const latin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const nums = '0123456789';
+    const alphabet = katakana + latin + nums;
+    
+    const fontSize = 16;
+    const columns = canvas.width / fontSize;
+    const drops = [];
+    
+    for (let i = 0; i < columns; i++) {
+        drops[i] = 1;
+    }
+    
+    function draw() {
+        ctx.fillStyle = 'rgba(22, 22, 26, 0.05)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        ctx.fillStyle = '#7f5af0';
+        ctx.font = fontSize + 'px monospace';
+        
+        for (let i = 0; i < drops.length; i++) {
+            const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+            ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+            
+            if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                drops[i] = 0;
+            }
+            drops[i]++;
+        }
+    }
+    
+    setInterval(draw, 33);
 }
 
 // Handle login
@@ -247,10 +306,11 @@ function startGame() {
         return;
     }
     
+    // Calculate game parameters based on level
     gameState.level = currentUser.level;
-    gameState.letters = generatePlayableLetters(5 + gameState.level);
-    gameState.requiredWords = 2 + Math.floor(gameState.level / 3);
-    gameState.minLength = 3 + Math.floor(gameState.level / 5);
+    gameState.letters = generatePlayableLetters(5 + Math.floor(currentUser.level / 2));
+    gameState.requiredWords = 2 + Math.floor(currentUser.level / 3);
+    gameState.minLength = Math.max(2, 3 + Math.floor(currentUser.level / 5));
     gameState.foundWords = [];
     
     updateGameUI();
@@ -260,37 +320,62 @@ function startGame() {
 
 // Generate letters that can form multiple valid words
 function generatePlayableLetters(count) {
-    const vowels = "aeiou";
-    const consonants = "bcdfghjklmnpqrstvwxyz";
     let letters = [];
+    let attempts = 0;
+    const maxAttempts = 100;
     
-    // Ensure at least 40% vowels
-    const vowelCount = Math.max(2, Math.ceil(count * 0.4));
-    const consonantCount = count - vowelCount;
+    do {
+        letters = [];
+        // Ensure at least 40% vowels
+        const vowelCount = Math.max(2, Math.ceil(count * 0.4));
+        const consonantCount = count - vowelCount;
+        
+        // Add vowels
+        for (let i = 0; i < vowelCount; i++) {
+            letters.push(VOWELS[Math.floor(Math.random() * VOWELS.length)]);
+        }
+        
+        // Add consonants
+        for (let i = 0; i < consonantCount; i++) {
+            letters.push(CONSONANTS[Math.floor(Math.random() * CONSONANTS.length)]);
+        }
+        
+        // Add one common ending to ensure word formation
+        if (count > 3) {
+            const ending = COMMON_ENDINGS[Math.floor(Math.random() * COMMON_ENDINGS.length)];
+            for (let i = 0; i < ending.length && letters.length < count; i++) {
+                letters.push(ending[i]);
+            }
+        }
+        
+        // Fill remaining slots if needed
+        while (letters.length < count) {
+            letters.push(Math.random() > 0.5 ? 
+                VOWELS[Math.floor(Math.random() * VOWELS.length)] : 
+                CONSONANTS[Math.floor(Math.random() * CONSONANTS.length)]);
+        }
+        
+        // Shuffle the letters
+        letters = shuffleArray(letters);
+        attempts++;
+    } while (attempts < maxAttempts && !canFormMultipleWords(letters, gameState.minLength));
     
-    // Add vowels
-    for (let i = 0; i < vowelCount; i++) {
-        letters.push(vowels[Math.floor(Math.random() * vowels.length)]);
+    return letters;
+}
+
+// Check if letters can form multiple words
+function canFormMultipleWords(letters, minLength) {
+    let validWords = 0;
+    const maxChecks = 50; // Limit for performance
+    
+    for (let i = 0; i < Math.min(maxChecks, frenchDict.length); i++) {
+        const word = frenchDict[i];
+        if (word.length >= minLength && isValidWord(word, letters)) {
+            validWords++;
+            if (validWords >= 3) return true;
+        }
     }
-    
-    // Add consonants
-    for (let i = 0; i < consonantCount; i++) {
-        letters.push(consonants[Math.floor(Math.random() * consonants.length)]);
-    }
-    
-    // Add one common ending to ensure word formation
-    const ending = COMMON_ENDINGS[Math.floor(Math.random() * COMMON_ENDINGS.length)];
-    for (let i = 0; i < ending.length && letters.length < count; i++) {
-        letters.push(ending[i]);
-    }
-    
-    // Fill remaining slots if needed
-    while (letters.length < count) {
-        letters.push(consonants[Math.floor(Math.random() * consonants.length)]);
-    }
-    
-    // Shuffle the letters
-    return shuffleArray(letters);
+    return false;
 }
 
 // Shuffle array
@@ -316,7 +401,7 @@ function updateGameUI() {
         const letterEl = document.createElement('div');
         letterEl.className = 'letter';
         letterEl.textContent = letter.toUpperCase();
-        letterEl.style.animation = `float ${3 + Math.random() * 2}s infinite ease-in-out`;
+        letterEl.style.animation = `quantumFloat ${3 + Math.random() * 2}s ease-in-out infinite`;
         lettersContainer.appendChild(letterEl);
     });
     
@@ -403,6 +488,9 @@ function isValidWord(word, letters) {
 
 // Check if word is in dictionary (binary search)
 function isWordInDictionary(word) {
+    // First check if word is at least 2 letters
+    if (word.length < 2) return false;
+    
     let left = 0;
     let right = frenchDict.length - 1;
     
@@ -458,7 +546,7 @@ function quitGame() {
 // Show message
 function showMessage(element, text, type) {
     element.textContent = text;
-    element.className = `message ${type}`;
+    element.className = `quantum-message ${type}`;
     element.classList.remove('hidden');
     
     if (type !== 'error') {
