@@ -245,7 +245,7 @@ function startGame() {
     }
     
     gameState.level = currentUser.level;
-    gameState.letters = generateLetters(5 + gameState.level);
+    gameState.letters = generateValidLetters(5 + gameState.level); // Changed to generateValidLetters
     gameState.requiredWords = 2 + Math.floor(gameState.level / 3);
     gameState.minLength = 3 + Math.floor(gameState.level / 5);
     gameState.foundWords = [];
@@ -255,21 +255,52 @@ function startGame() {
     showScreen('game');
 }
 
-// Generate random letters
-function generateLetters(count) {
-    const frequent = "eaistnrulod";
-    const other = "bcdfghjkmnpqvwxyz";
+// Generate letters that can form at least one valid word
+function generateValidLetters(count) {
+    const vowels = "aeiou";
+    const consonants = "bcdfghjklmnpqrstvwxyz";
     let letters = [];
-    
-    for (let i = 0; i < count; i++) {
-        if (i < count / 2) {
-            letters.push(frequent[Math.floor(Math.random() * frequent.length)]);
-        } else {
-            letters.push(other[Math.floor(Math.random() * other.length)]);
+    let attempts = 0;
+    const maxAttempts = 100;
+
+    do {
+        letters = [];
+        // Ensure at least 2 vowels
+        for (let i = 0; i < 2; i++) {
+            letters.push(vowels[Math.floor(Math.random() * vowels.length)]);
+        }
+        // Fill the rest with consonants
+        for (let i = 2; i < count; i++) {
+            letters.push(consonants[Math.floor(Math.random() * consonants.length)]);
+        }
+        // Shuffle the letters
+        letters = shuffleArray(letters);
+        attempts++;
+    } while (attempts < maxAttempts && !canFormValidWord(letters));
+
+    return letters;
+}
+
+// Check if the letters can form at least one valid word
+function canFormValidWord(letters) {
+    // Check a subset of the dictionary for performance
+    const sampleSize = Math.min(100, frenchDict.length);
+    for (let i = 0; i < sampleSize; i++) {
+        const word = frenchDict[i];
+        if (word.length >= 3 && isValidWord(word, letters)) {
+            return true;
         }
     }
-    
-    return letters;
+    return false;
+}
+
+// Shuffle array
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
 }
 
 // Update game UI
@@ -309,7 +340,10 @@ function updateGameUI() {
 function submitWord() {
     const word = wordInput.value.trim().toLowerCase();
     
-    if (!word) return;
+    if (!word) {
+        showMessage(gameMessage, 'Please enter a word', 'error');
+        return;
+    }
     
     if (word === '0') {
         saveAndQuit();
