@@ -179,7 +179,7 @@ function handleRegister() {
         return;
     }
     
-    if (isNaN(age) {
+    if (isNaN(age)) {
         showMessage(registerMessage, 'Please enter a valid age', 'error');
         return;
     }
