@@ -57,8 +57,11 @@ const wordList = document.getElementById('word-list');
 const saveQuitBtn = document.getElementById('save-quit-btn');
 
 // Common French word endings that help form valid words
-const COMMON_ENDINGS = ["er", "ir", "re", "ez", "ons", "ent", "ais", "ait", "ant", "tion"];
-const COMMON_PREFIXES = ["de", "le", "la", "en", "un", "re", "in", "co", "pre", "par"];
+const COMMON_ENDINGS = ["er", "ir", "re", "ez", "ons", "ent", "ais", "ait", "ant", "tion", "ment", "age", "eur", "euse", "ique", "isme", "iste", "able", "ible", "ure", "if", "ive"];
+const COMMON_PREFIXES = ["de", "le", "la", "en", "un", "re", "in", "co", "pre", "par", "sur", "sous", "mal", "contre", "anti", "auto", "extra", "hyper", "inter", "mono"];
+
+// French vowels including accented characters
+const FRENCH_VOWELS = "aeiouyéèêëàâùûüîïôœ";
 
 // Initialize the game
 function init() {
@@ -297,7 +300,7 @@ function startGame() {
     gameState.level = currentUser.level;
     
     // Calculate game parameters based on level
-    const letterCount = Math.min(10, 5 + Math.floor(gameState.level / 2));
+    const letterCount = Math.min(12, 5 + Math.floor(gameState.level / 2));
     gameState.requiredWords = Math.min(10, 2 + Math.floor(gameState.level / 3));
     gameState.minLength = Math.max(MIN_WORD_LENGTH, 2 + Math.floor(gameState.level / 5));
     
@@ -312,8 +315,8 @@ function startGame() {
 
 // Generate letters that can form multiple valid words
 function generatePlayableLetters(count) {
-    const vowels = "aeiouy";
-    const consonants = "bcdfghjklmnpqrstvwxz";
+    const vowels = FRENCH_VOWELS;
+    const consonants = "bcdfghjklmnpqrstvwxzç";
     let letters = [];
     
     // Ensure at least 40% vowels
@@ -330,18 +333,21 @@ function generatePlayableLetters(count) {
         letters.push(consonants[Math.floor(Math.random() * consonants.length)]);
     }
     
-    // Add one common prefix or ending
-    const commonPart = Math.random() > 0.5 
-        ? COMMON_PREFIXES[Math.floor(Math.random() * COMMON_PREFIXES.length)]
-        : COMMON_ENDINGS[Math.floor(Math.random() * COMMON_ENDINGS.length)];
-    
-    for (let i = 0; i < commonPart.length && letters.length < count; i++) {
-        letters.push(commonPart[i]);
+    // Add one common prefix or ending (30% chance)
+    if (Math.random() < 0.3) {
+        const commonPart = Math.random() > 0.5 
+            ? COMMON_PREFIXES[Math.floor(Math.random() * COMMON_PREFIXES.length)]
+            : COMMON_ENDINGS[Math.floor(Math.random() * COMMON_ENDINGS.length)];
+        
+        for (let i = 0; i < commonPart.length && letters.length < count; i++) {
+            letters.push(commonPart[i]);
+        }
     }
     
     // Fill remaining slots if needed
     while (letters.length < count) {
-        letters.push(consonants[Math.floor(Math.random() * consonants.length)]);
+        const charSet = Math.random() > 0.5 ? vowels : consonants;
+        letters.push(charSet[Math.floor(Math.random() * charSet.length)]);
     }
     
     // Shuffle the letters
@@ -489,8 +495,14 @@ function isValidWord(word, letters) {
     
     for (const char of word) {
         const index = availableLetters.indexOf(char);
-        if (index === -1) return false;
-        availableLetters.splice(index, 1);
+        if (index === -1) {
+            // Check for uppercase version (just in case)
+            const upperIndex = availableLetters.indexOf(char.toUpperCase());
+            if (upperIndex === -1) return false;
+            availableLetters.splice(upperIndex, 1);
+        } else {
+            availableLetters.splice(index, 1);
+        }
     }
     
     return true;
@@ -500,7 +512,7 @@ function isValidWord(word, letters) {
 function isWordInDictionary(word) {
     // First check if it's a very short word (2 letters)
     if (word.length === 2) {
-        const commonTwoLetterWords = ["de", "le", "la", "en", "un", "à", "et", "ou", "si", "il"];
+        const commonTwoLetterWords = ["de", "le", "la", "en", "un", "à", "et", "ou", "si", "il", "du", "au", "ce", "ça"];
         return commonTwoLetterWords.includes(word);
     }
     
