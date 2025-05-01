@@ -14,36 +14,35 @@ let gameState = {
 };
 
 // DOM elements
-const loginScreen = document.getElementById('login-screen');
-const mainMenu = document.getElementById('main-menu');
-const profileScreen = document.getElementById('profile-screen');
-const gameScreen = document.getElementById('game-screen');
+const screens = {
+    login: document.getElementById('login-screen'),
+    mainMenu: document.getElementById('main-menu'),
+    profile: document.getElementById('profile-screen'),
+    game: document.getElementById('game-screen')
+};
 
+const loginForm = document.getElementById('login-form');
+const registerForm = document.getElementById('register-form');
 const playerNameInput = document.getElementById('player-name');
 const loginBtn = document.getElementById('login-btn');
 const loginMessage = document.getElementById('login-message');
-
 const registerNameInput = document.getElementById('register-name');
 const registerSurnameInput = document.getElementById('register-surname');
 const registerAgeInput = document.getElementById('register-age');
 const registerBtn = document.getElementById('register-btn');
 const registerMessage = document.getElementById('register-message');
-
 const welcomeNameSpan = document.getElementById('welcome-name');
 const menuLevelSpan = document.getElementById('menu-level');
 const menuScoreSpan = document.getElementById('menu-score');
-
 const newGameBtn = document.getElementById('new-game-btn');
 const resumeGameBtn = document.getElementById('resume-game-btn');
 const profileBtn = document.getElementById('profile-btn');
 const quitBtn = document.getElementById('quit-btn');
-
 const profileNameSpan = document.getElementById('profile-name');
 const profileAgeSpan = document.getElementById('profile-age');
 const profileLevelSpan = document.getElementById('profile-level');
 const profileScoreSpan = document.getElementById('profile-score');
 const backToMenuBtn = document.getElementById('back-to-menu-btn');
-
 const currentLevelSpan = document.getElementById('current-level');
 const wordsFoundSpan = document.getElementById('words-found');
 const wordsNeededSpan = document.getElementById('words-needed');
@@ -60,10 +59,23 @@ function init() {
     loadUsers();
     setupEventListeners();
     initParticles();
+    showScreen('login');
+}
+
+// Show specific screen and hide others
+function showScreen(screenName) {
+    Object.keys(screens).forEach(key => {
+        if (key === screenName) {
+            screens[key].classList.add('active');
+        } else {
+            screens[key].classList.remove('active');
+        }
+    });
 }
 
 // Set up event listeners
 function setupEventListeners() {
+    // Login/Register events
     loginBtn.addEventListener('click', handleLogin);
     registerBtn.addEventListener('click', handleRegister);
     
@@ -83,18 +95,26 @@ function setupEventListeners() {
         if (e.key === 'Enter') handleRegister();
     });
     
+    // Main menu events
     newGameBtn.addEventListener('click', () => {
+        if (!currentUser) return;
         currentUser.level = 1;
         currentUser.score = 0;
         startGame();
     });
     
-    resumeGameBtn.addEventListener('click', startGame);
+    resumeGameBtn.addEventListener('click', () => {
+        if (!currentUser) return;
+        startGame();
+    });
+    
     profileBtn.addEventListener('click', showProfile);
     quitBtn.addEventListener('click', quitGame);
     
+    // Profile events
     backToMenuBtn.addEventListener('click', showMainMenu);
     
+    // Game events
     submitWordBtn.addEventListener('click', submitWord);
     wordInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') submitWord();
@@ -105,111 +125,26 @@ function setupEventListeners() {
 
 // Initialize particles.js
 function initParticles() {
-    particlesJS('particles-js', {
-        "particles": {
-            "number": {
-                "value": 80,
-                "density": {
-                    "enable": true,
-                    "value_area": 800
-                }
+    if (typeof particlesJS !== 'undefined') {
+        particlesJS('particles-js', {
+            particles: {
+                number: { value: 80, density: { enable: true, value_area: 800 } },
+                color: { value: "#4cc9f0" },
+                shape: { type: "circle" },
+                opacity: { value: 0.5 },
+                size: { value: 3, random: true },
+                line_linked: { enable: true, distance: 150, color: "#4cc9f0", opacity: 0.4, width: 1 },
+                move: { enable: true, speed: 2 }
             },
-            "color": {
-                "value": "#4cc9f0"
-            },
-            "shape": {
-                "type": "circle",
-                "stroke": {
-                    "width": 0,
-                    "color": "#000000"
-                },
-                "polygon": {
-                    "nb_sides": 5
-                }
-            },
-            "opacity": {
-                "value": 0.5,
-                "random": false,
-                "anim": {
-                    "enable": false,
-                    "speed": 1,
-                    "opacity_min": 0.1,
-                    "sync": false
-                }
-            },
-            "size": {
-                "value": 3,
-                "random": true,
-                "anim": {
-                    "enable": false,
-                    "speed": 40,
-                    "size_min": 0.1,
-                    "sync": false
-                }
-            },
-            "line_linked": {
-                "enable": true,
-                "distance": 150,
-                "color": "#4cc9f0",
-                "opacity": 0.4,
-                "width": 1
-            },
-            "move": {
-                "enable": true,
-                "speed": 2,
-                "direction": "none",
-                "random": false,
-                "straight": false,
-                "out_mode": "out",
-                "bounce": false,
-                "attract": {
-                    "enable": false,
-                    "rotateX": 600,
-                    "rotateY": 1200
+            interactivity: {
+                detect_on: "canvas",
+                events: {
+                    onhover: { enable: true, mode: "grab" },
+                    onclick: { enable: true, mode: "push" }
                 }
             }
-        },
-        "interactivity": {
-            "detect_on": "canvas",
-            "events": {
-                "onhover": {
-                    "enable": true,
-                    "mode": "grab"
-                },
-                "onclick": {
-                    "enable": true,
-                    "mode": "push"
-                },
-                "resize": true
-            },
-            "modes": {
-                "grab": {
-                    "distance": 140,
-                    "line_linked": {
-                        "opacity": 1
-                    }
-                },
-                "bubble": {
-                    "distance": 400,
-                    "size": 40,
-                    "duration": 2,
-                    "opacity": 8,
-                    "speed": 3
-                },
-                "repulse": {
-                    "distance": 200,
-                    "duration": 0.4
-                },
-                "push": {
-                    "particles_nb": 4
-                },
-                "remove": {
-                    "particles_nb": 2
-                }
-            }
-        },
-        "retina_detect": true
-    });
+        });
+    }
 }
 
 // Handle login
@@ -226,8 +161,8 @@ function handleLogin() {
     if (currentUser) {
         showMainMenu();
     } else {
-        document.getElementById('login-form').classList.add('hidden');
-        document.getElementById('register-form').classList.remove('hidden');
+        loginForm.classList.add('hidden');
+        registerForm.classList.remove('hidden');
         registerNameInput.value = name;
         registerSurnameInput.focus();
     }
@@ -277,36 +212,37 @@ function findUser(name) {
 
 // Show main menu
 function showMainMenu() {
-    hideAllScreens();
-    mainMenu.classList.add('active');
+    if (!currentUser) {
+        showScreen('login');
+        return;
+    }
     
     welcomeNameSpan.textContent = currentUser.name;
     menuLevelSpan.textContent = currentUser.level;
     menuScoreSpan.textContent = currentUser.score;
+    showScreen('mainMenu');
 }
 
 // Show profile
 function showProfile() {
-    hideAllScreens();
-    profileScreen.classList.add('active');
+    if (!currentUser) {
+        showScreen('login');
+        return;
+    }
     
     profileNameSpan.textContent = `${currentUser.name} ${currentUser.surname}`;
     profileAgeSpan.textContent = currentUser.age;
     profileLevelSpan.textContent = currentUser.level;
     profileScoreSpan.textContent = currentUser.score;
-}
-
-// Hide all screens
-function hideAllScreens() {
-    document.querySelectorAll('.screen').forEach(screen => {
-        screen.classList.remove('active');
-    });
+    showScreen('profile');
 }
 
 // Start game
 function startGame() {
-    hideAllScreens();
-    gameScreen.classList.add('active');
+    if (!currentUser) {
+        showScreen('login');
+        return;
+    }
     
     gameState.level = currentUser.level;
     gameState.letters = generateLetters(5 + gameState.level);
@@ -316,6 +252,7 @@ function startGame() {
     
     updateGameUI();
     wordInput.focus();
+    showScreen('game');
 }
 
 // Generate random letters
@@ -337,6 +274,8 @@ function generateLetters(count) {
 
 // Update game UI
 function updateGameUI() {
+    if (!currentUser) return;
+    
     currentLevelSpan.textContent = gameState.level;
     wordsFoundSpan.textContent = gameState.foundWords.length;
     wordsNeededSpan.textContent = gameState.requiredWords;
@@ -472,12 +411,11 @@ function saveAndQuit() {
 function quitGame() {
     if (confirm('Are you sure you want to quit?')) {
         currentUser = null;
-        hideAllScreens();
-        loginScreen.classList.add('active');
+        showScreen('login');
         
         // Reset login form
-        document.getElementById('login-form').classList.remove('hidden');
-        document.getElementById('register-form').classList.add('hidden');
+        loginForm.classList.remove('hidden');
+        registerForm.classList.add('hidden');
         playerNameInput.value = '';
         loginMessage.classList.add('hidden');
         registerMessage.classList.add('hidden');
