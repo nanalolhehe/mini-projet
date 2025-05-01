@@ -1,3 +1,4 @@
+/* === DREAMY NEON PINK SHOOTING DOTS THEME === */
 :root {
   --neon-pink: #ff2a6d;
   --neon-pink-light: #ff7eb3;
@@ -7,7 +8,7 @@
   --cosmic-mist: rgba(255, 255, 255, 0.05);
 }
 
-/* Cosmic Base Styles */
+/* === BASE STYLES === */
 * {
   margin: 0;
   padding: 0;
@@ -23,95 +24,24 @@ body {
   perspective: 1000px;
 }
 
-/* Floating Bubbles Background */
-.bubble {
-  position: absolute;
-  border-radius: 50%;
-  background: radial-gradient(
-    circle at 30% 30%,
-    var(--neon-pink-light),
-    var(--neon-pink)
-  );
-  opacity: 0.3;
-  filter: blur(15px);
-  animation: floatBubble linear infinite;
-  z-index: -1;
-}
-
-@keyframes floatBubble {
-  0% {
-    transform: translateY(0) translateX(0) scale(1);
-    opacity: 0.2;
-  }
-  50% {
-    opacity: 0.5;
-  }
-  100% {
-    transform: translateY(-100vh) translateX(20px) scale(1.2);
-    opacity: 0;
-  }
-}
-
-/* Create bubbles dynamically */
-.bubble:nth-child(1) {
-  width: 150px;
-  height: 150px;
-  left: 10%;
-  top: 80%;
-  animation-duration: 25s;
-  animation-delay: 0s;
-}
-.bubble:nth-child(2) {
-  width: 200px;
-  height: 200px;
-  left: 25%;
-  top: 70%;
-  animation-duration: 30s;
-  animation-delay: 5s;
-}
-.bubble:nth-child(3) {
-  width: 100px;
-  height: 100px;
-  left: 60%;
-  top: 90%;
-  animation-duration: 20s;
-  animation-delay: 2s;
-}
-.bubble:nth-child(4) {
-  width: 250px;
-  height: 250px;
-  left: 80%;
-  top: 60%;
-  animation-duration: 35s;
-  animation-delay: 7s;
-}
-.bubble:nth-child(5) {
-  width: 180px;
-  height: 180px;
-  left: 40%;
-  top: 85%;
-  animation-duration: 28s;
-  animation-delay: 3s;
-}
-
-/* Neon Pink Dots Shooting Animation */
+/* === SHOOTING NEON DOTS === */
 .neon-dot {
   position: absolute;
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   background: var(--neon-pink);
   box-shadow: 
     0 0 10px var(--neon-pink),
-    0 0 20px var(--neon-pink),
-    0 0 30px var(--neon-pink);
+    0 0 20px var(--neon-pink);
   animation: shootDot linear infinite;
   z-index: -1;
+  opacity: 0.8;
 }
 
 @keyframes shootDot {
   0% {
-    transform: translateY(100vh) translateX(0);
+    transform: translateY(100vh) translateX(var(--start-x));
     opacity: 0;
   }
   10% {
@@ -121,252 +51,125 @@ body {
     opacity: 1;
   }
   100% {
-    transform: translateY(-100px) translateX(50px);
+    transform: translateY(-100px) translateX(calc(var(--start-x) + var(--drift)));
     opacity: 0;
   }
 }
 
-/* Create shooting dots dynamically */
-.neon-dot:nth-child(6) {
-  left: 15%;
-  animation-duration: 3s;
-  animation-delay: 0s;
-}
-.neon-dot:nth-child(7) {
-  left: 30%;
-  animation-duration: 4s;
-  animation-delay: 1s;
-}
-.neon-dot:nth-child(8) {
-  left: 45%;
-  animation-duration: 3.5s;
-  animation-delay: 0.5s;
-}
-.neon-dot:nth-child(9) {
-  left: 60%;
-  animation-duration: 4.2s;
-  animation-delay: 1.2s;
-}
-.neon-dot:nth-child(10) {
-  left: 75%;
-  animation-duration: 3.8s;
-  animation-delay: 0.8s;
+/* Generate 20 shooting dots with random positions */
+.neon-dot:nth-child(1) { --start-x: 5%; --drift: 30px; left: 5%; animation-duration: 3s; animation-delay: 0s; }
+.neon-dot:nth-child(2) { --start-x: 15%; --drift: -20px; left: 15%; animation-duration: 4s; animation-delay: 1s; }
+.neon-dot:nth-child(3) { --start-x: 25%; --drift: 40px; left: 25%; animation-duration: 3.5s; animation-delay: 0.5s; }
+.neon-dot:nth-child(4) { --start-x: 35%; --drift: -30px; left: 35%; animation-duration: 4.2s; animation-delay: 1.2s; }
+.neon-dot:nth-child(5) { --start-x: 45%; --drift: 25px; left: 45%; animation-duration: 3.8s; animation-delay: 0.8s; }
+.neon-dot:nth-child(6) { --start-x: 55%; --drift: -15px; left: 55%; animation-duration: 3.2s; animation-delay: 0.2s; }
+.neon-dot:nth-child(7) { --start-x: 65%; --drift: 35px; left: 65%; animation-duration: 4.5s; animation-delay: 1.5s; }
+.neon-dot:nth-child(8) { --start-x: 75%; --drift: -25px; left: 75%; animation-duration: 3.9s; animation-delay: 0.9s; }
+.neon-dot:nth-child(9) { --start-x: 85%; --drift: 20px; left: 85%; animation-duration: 4.1s; animation-delay: 1.1s; }
+.neon-dot:nth-child(10) { --start-x: 95%; --drift: -40px; left: 95%; animation-duration: 3.6s; animation-delay: 0.6s; }
+
+/* === FLOATING DREAMY BUBBLES === */
+.bubble {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 30% 30%,
+    var(--neon-pink-light),
+    var(--neon-pink)
+  );
+  opacity: 0.15;
+  filter: blur(25px);
+  animation: floatBubble linear infinite;
+  z-index: -1;
 }
 
-/* Dreamy UI Container */
-.dream-container {
+@keyframes floatBubble {
+  0% {
+    transform: translateY(100vh) translateX(0) scale(0.8);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.2;
+  }
+  90% {
+    opacity: 0.2;
+  }
+  100% {
+    transform: translateY(-100px) translateX(50px) scale(1.2);
+    opacity: 0;
+  }
+}
+
+/* Generate 10 floating bubbles */
+.bubble:nth-child(11) { width: 200px; height: 200px; left: 10%; animation-duration: 25s; animation-delay: 0s; }
+.bubble:nth-child(12) { width: 250px; height: 250px; left: 25%; animation-duration: 30s; animation-delay: 5s; }
+.bubble:nth-child(13) { width: 150px; height: 150px; left: 40%; animation-duration: 28s; animation-delay: 3s; }
+.bubble:nth-child(14) { width: 300px; height: 300px; left: 55%; animation-duration: 35s; animation-delay: 7s; }
+.bubble:nth-child(15) { width: 180px; height: 180px; left: 70%; animation-duration: 27s; animation-delay: 2s; }
+.bubble:nth-child(16) { width: 220px; height: 220px; left: 85%; animation-duration: 32s; animation-delay: 6s; }
+
+/* === VISIBLE GAME CONTENT === */
+.game-container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
   padding: 20px;
-  perspective: 1000px;
-}
-
-.dream-screen {
-  display: none;
-  width: 100%;
-  max-width: 800px;
-  animation: dreamyFadeIn 1.2s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.dream-screen.active {
-  display: block;
-}
-
-@keyframes dreamyFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(30px) rotateX(10deg) scale(0.95);
-    filter: blur(5px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) rotateX(0) scale(1);
-    filter: blur(0);
-  }
-}
-
-/* Dreamy Card */
-.dream-card {
-  background: rgba(12, 12, 26, 0.4);
-  backdrop-filter: blur(20px) saturate(180%);
-  border-radius: 20px;
-  padding: 40px;
-  box-shadow: 
-    0 0 30px rgba(255, 42, 109, 0.2),
-    inset 0 0 20px rgba(255, 126, 179, 0.1);
-  width: 100%;
-  transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
-  position: relative;
-  overflow: hidden;
-  border: 1px solid rgba(255, 126, 179, 0.1);
-}
-
-.dream-card::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(
-    circle at center,
-    rgba(255, 42, 109, 0.1) 0%,
-    transparent 70%
-  );
-  animation: rotateDream 60s linear infinite;
-  z-index: -1;
-}
-
-@keyframes rotateDream {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-.dream-card:hover {
-  transform: translateY(-5px) scale(1.01);
-  box-shadow: 
-    0 0 40px rgba(255, 42, 109, 0.3),
-    inset 0 0 30px rgba(255, 126, 179, 0.2);
-}
-
-/* Dreamy Typography */
-.dream-title {
-  font-family: 'Orbitron', sans-serif;
-  font-weight: 500;
-  font-size: 2.5rem;
-  color: transparent;
-  background: linear-gradient(45deg, var(--neon-pink), var(--soft-purple));
-  -webkit-background-clip: text;
-  background-clip: text;
-  text-shadow: 
-    0 0 10px rgba(255, 42, 109, 0.3),
-    0 0 20px rgba(255, 42, 109, 0.2);
-  margin-bottom: 30px;
-  letter-spacing: 2px;
-  animation: neonPulse 3s infinite alternate;
-}
-
-@keyframes neonPulse {
-  from {
-    text-shadow: 
-      0 0 10px rgba(255, 42, 109, 0.3),
-      0 0 20px rgba(255, 42, 109, 0.2);
-  }
-  to {
-    text-shadow: 
-      0 0 15px rgba(255, 42, 109, 0.4),
-      0 0 30px rgba(255, 42, 109, 0.3),
-      0 0 45px rgba(255, 42, 109, 0.2);
-  }
-}
-
-.dream-text {
-  font-family: 'Rajdhani', sans-serif;
-  font-weight: 400;
-  color: rgba(255, 255, 255, 0.8);
-  line-height: 1.6;
-  position: relative;
-}
-
-/* Dreamy Buttons */
-.dream-btn {
-  display: inline-block;
-  background: linear-gradient(135deg, var(--neon-pink), var(--neon-pink-dark));
-  color: white;
-  border: none;
-  padding: 16px 32px;
-  margin: 15px 0;
-  border-radius: 50px;
-  cursor: pointer;
-  font-size: 1rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
-  position: relative;
-  overflow: hidden;
   z-index: 1;
-  box-shadow: 
-    0 5px 20px rgba(255, 42, 109, 0.4),
-    inset 0 0 10px rgba(255, 255, 255, 0.1);
 }
 
-.dream-btn::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, 
-    transparent, 
-    rgba(255, 255, 255, 0.3), 
-    transparent);
-  transition: 0.6s;
-  z-index: -1;
-}
-
-.dream-btn:hover {
-  transform: translateY(-5px);
-  box-shadow: 
-    0 10px 30px rgba(255, 42, 109, 0.6),
-    inset 0 0 15px rgba(255, 255, 255, 0.2);
-}
-
-.dream-btn:hover::before {
-  left: 100%;
-}
-
-.dream-btn:active {
-  transform: translateY(2px);
-}
-
-/* Dreamy Inputs */
-.dream-input {
-  width: 100%;
-  padding: 18px 25px;
-  margin: 20px 0;
-  border: none;
-  border-radius: 50px;
-  background: rgba(12, 12, 26, 0.5);
+/* Text Elements */
+.game-title {
+  font-size: 3rem;
+  font-weight: 700;
   color: white;
-  font-size: 1.1rem;
-  transition: all 0.5s ease;
-  backdrop-filter: blur(10px);
-  box-shadow: 
-    inset 0 0 15px rgba(255, 126, 179, 0.1),
-    0 0 15px rgba(255, 42, 109, 0.1);
-  border: 1px solid rgba(255, 126, 179, 0.2);
+  text-shadow: 
+    0 0 10px var(--neon-pink),
+    0 0 20px var(--neon-pink),
+    0 0 30px var(--neon-pink);
+  margin-bottom: 2rem;
+  text-align: center;
+  animation: glowPulse 2s infinite alternate;
 }
 
-.dream-input:focus {
-  outline: none;
-  background: rgba(12, 12, 26, 0.7);
-  box-shadow: 
-    inset 0 0 20px rgba(255, 126, 179, 0.2),
-    0 0 25px rgba(255, 42, 109, 0.2);
-  border: 1px solid rgba(255, 126, 179, 0.3);
+@keyframes glowPulse {
+  from {
+    text-shadow: 
+      0 0 10px var(--neon-pink),
+      0 0 20px var(--neon-pink);
+  }
+  to {
+    text-shadow: 
+      0 0 15px var(--neon-pink),
+      0 0 30px var(--neon-pink),
+      0 0 45px var(--neon-pink);
+  }
 }
 
-.dream-input::placeholder {
-  color: rgba(255, 255, 255, 0.5);
-  font-style: italic;
+.game-text {
+  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.9);
+  text-align: center;
+  max-width: 600px;
+  margin-bottom: 2rem;
+  line-height: 1.6;
 }
 
-/* Dreamy Letters */
-.dream-letters {
+/* Game Letters */
+.letters-container {
   display: flex;
   flex-wrap: wrap;
   gap: 15px;
   justify-content: center;
-  margin: 40px 0;
+  margin: 2rem 0;
 }
 
 .letter {
-  width: 70px;
-  height: 70px;
+  width: 60px;
+  height: 60px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -376,190 +179,173 @@ body {
   font-weight: bold;
   border-radius: 50%;
   cursor: pointer;
-  transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
-  box-shadow: 
-    0 0 20px rgba(255, 42, 109, 0.3),
-    inset 0 0 10px rgba(255, 255, 255, 0.1);
-  text-transform: uppercase;
-  animation: floatLetter 6s ease-in-out infinite;
-  position: relative;
-  overflow: hidden;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
   border: 1px solid rgba(255, 126, 179, 0.3);
+  box-shadow: 
+    0 0 15px rgba(255, 42, 109, 0.3),
+    inset 0 0 10px rgba(255, 255, 255, 0.1);
+  animation: float 4s ease-in-out infinite;
 }
 
-.letter::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(
-    to bottom right,
-    transparent,
-    transparent,
-    transparent,
-    rgba(255, 255, 255, 0.1),
-    transparent,
-    transparent,
-    transparent
-  );
-  transform: rotate(30deg);
-  animation: letterShine 4s infinite;
-}
-
-@keyframes floatLetter {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  50% { transform: translateY(-20px) rotate(5deg); }
-}
-
-@keyframes letterShine {
-  0% { left: -100%; }
-  20% { left: 100%; }
-  100% { left: 100%; }
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
 }
 
 .letter:hover {
-  transform: translateY(-10px) scale(1.1);
-  box-shadow: 
-    0 0 30px rgba(255, 42, 109, 0.5),
-    inset 0 0 20px rgba(255, 255, 255, 0.2);
+  transform: translateY(-5px) scale(1.1);
   background: rgba(255, 42, 109, 0.3);
+  box-shadow: 
+    0 0 20px rgba(255, 42, 109, 0.5),
+    inset 0 0 15px rgba(255, 255, 255, 0.2);
 }
 
 .letter.selected {
   background: rgba(255, 42, 109, 0.4);
   box-shadow: 
-    0 0 30px rgba(255, 42, 109, 0.6),
+    0 0 25px rgba(255, 42, 109, 0.7),
     inset 0 0 20px rgba(255, 255, 255, 0.3);
   transform: scale(1.1);
 }
 
-/* Dreamy List */
-.dream-list {
-  max-height: 300px;
+/* Word Input */
+.word-input-container {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  margin: 1rem 0;
+}
+
+.word-input {
+  width: 100%;
+  padding: 15px 25px;
+  background: rgba(12, 12, 26, 0.4);
+  border: none;
+  border-radius: 50px;
+  color: white;
+  font-size: 1.2rem;
+  text-align: center;
+  backdrop-filter: blur(10px);
+  box-shadow: 
+    inset 0 0 15px rgba(255, 126, 179, 0.1),
+    0 0 20px rgba(255, 42, 109, 0.1);
+  transition: all 0.3s ease;
+}
+
+.word-input:focus {
+  outline: none;
+  box-shadow: 
+    inset 0 0 20px rgba(255, 126, 179, 0.2),
+    0 0 30px rgba(255, 42, 109, 0.2);
+}
+
+/* Buttons */
+.game-btn {
+  padding: 12px 30px;
+  margin: 10px;
+  background: rgba(255, 42, 109, 0.3);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
+  box-shadow: 
+    0 0 15px rgba(255, 42, 109, 0.2),
+    inset 0 0 10px rgba(255, 255, 255, 0.1);
+}
+
+.game-btn:hover {
+  background: rgba(255, 42, 109, 0.5);
+  transform: translateY(-3px);
+  box-shadow: 
+    0 0 25px rgba(255, 42, 109, 0.4),
+    inset 0 0 15px rgba(255, 255, 255, 0.2);
+}
+
+/* Word List */
+.word-list {
+  max-height: 200px;
   overflow-y: auto;
-  margin-top: 30px;
-  padding-right: 15px;
+  padding: 15px;
+  margin: 1rem 0;
+  width: 100%;
+  max-width: 400px;
 }
 
-.dream-list::-webkit-scrollbar {
-  width: 8px;
+.word-list::-webkit-scrollbar {
+  width: 6px;
 }
 
-.dream-list::-webkit-scrollbar-track {
-  background: rgba(255, 42, 109, 0.1);
-  border-radius: 10px;
-}
-
-.dream-list::-webkit-scrollbar-thumb {
+.word-list::-webkit-scrollbar-thumb {
   background: var(--neon-pink);
-  border-radius: 10px;
+  border-radius: 3px;
 }
 
 .word-item {
-  padding: 18px 25px;
-  margin: 15px 0;
-  background: rgba(12, 12, 26, 0.4);
+  padding: 12px 20px;
+  margin: 8px 0;
+  background: rgba(255, 42, 109, 0.1);
   border-radius: 50px;
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  transition: all 0.5s ease;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 126, 179, 0.1);
-  box-shadow: 
-    inset 0 0 15px rgba(255, 126, 179, 0.1),
-    0 0 15px rgba(255, 42, 109, 0.1);
+  transition: all 0.3s ease;
 }
 
 .word-item:hover {
   background: rgba(255, 42, 109, 0.2);
   transform: translateX(10px);
-  box-shadow: 
-    inset 0 0 20px rgba(255, 126, 179, 0.2),
-    0 0 20px rgba(255, 42, 109, 0.2);
 }
 
-.word-score {
-  color: var(--neon-pink-light);
-  font-weight: bold;
-  font-size: 1.3rem;
-  text-shadow: 0 0 10px rgba(255, 126, 179, 0.5);
-}
-
-/* Dreamy Message */
-.dream-message {
-  padding: 20px;
-  margin: 25px 0;
+/* Message Display */
+.game-message {
+  padding: 15px 25px;
+  margin: 1rem 0;
   border-radius: 50px;
   text-align: center;
-  animation: dreamyFadeIn 0.8s ease;
+  animation: fadeIn 0.5s ease;
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 126, 179, 0.3);
-  box-shadow: 
-    inset 0 0 15px rgba(255, 126, 179, 0.1),
-    0 0 15px rgba(255, 42, 109, 0.1);
 }
 
-.dream-message.error {
-  background: rgba(255, 42, 109, 0.2);
-  border-color: var(--neon-pink);
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-.dream-message.success {
+.game-message.success {
   background: rgba(179, 153, 255, 0.2);
-  border-color: var(--soft-purple);
+  color: white;
+  box-shadow: 0 0 20px rgba(179, 153, 255, 0.2);
 }
 
-.hidden {
-  display: none;
+.game-message.error {
+  background: rgba(255, 42, 109, 0.2);
+  color: white;
+  box-shadow: 0 0 20px rgba(255, 42, 109, 0.2);
 }
 
-/* Responsive Design */
+/* Responsive Adjustments */
 @media (max-width: 768px) {
-  .dream-card {
-    padding: 30px;
-  }
-  
-  .dream-title {
+  .game-title {
     font-size: 2rem;
   }
   
   .letter {
-    width: 60px;
-    height: 60px;
-    font-size: 1.8rem;
+    width: 50px;
+    height: 50px;
+    font-size: 1.5rem;
   }
   
-  .dream-input {
-    padding: 16px 20px;
+  .word-input {
+    padding: 12px 20px;
+    font-size: 1rem;
   }
   
-  .dream-btn {
-    padding: 14px 28px;
+  .game-btn {
+    padding: 10px 20px;
+    font-size: 0.9rem;
   }
-}
-
-/* 3D Soft Effect */
-.dream-card {
-  transform-style: preserve-3d;
-}
-
-.dream-card::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(
-    circle at center,
-    rgba(255, 126, 179, 0.1) 0%,
-    transparent 70%
-  );
-  transform: translateZ(-20px);
-  opacity: 0.5;
-  z-index: -2;
-  border-radius: 20px;
 }
