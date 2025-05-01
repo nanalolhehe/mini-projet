@@ -1,633 +1,565 @@
 :root {
-    --quantum-primary: #7f5af0;
-    --quantum-secondary: #2cb67d;
-    --quantum-accent: #ff6e6c;
-    --quantum-bg: #16161a;
-    --quantum-text: #fffffe;
-    --quantum-highlight: #94a1b2;
-    --quantum-panel: rgba(22, 22, 26, 0.8);
-    --neon-pink: #ff2a6d;
-    --neon-blue: #05d9e8;
-    --neon-purple: #d300c5;
+  --neon-pink: #ff2a6d;
+  --neon-pink-light: #ff7eb3;
+  --neon-pink-dark: #d1005e;
+  --soft-purple: #b399ff;
+  --deep-space: #0c0c1a;
+  --cosmic-mist: rgba(255, 255, 255, 0.05);
 }
 
-/* Quantum Base Styles */
+/* Cosmic Base Styles */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Rajdhani', 'Orbitron', sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Rajdhani', 'Orbitron', sans-serif;
 }
 
 body {
-    background-color: var(--quantum-bg);
-    color: var(--quantum-text);
-    overflow: hidden;
-    height: 100vh;
-    perspective: 1000px;
+  background-color: var(--deep-space);
+  color: white;
+  overflow: hidden;
+  height: 100vh;
+  perspective: 1000px;
 }
 
-#webgl-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -2;
+/* Floating Bubbles Background */
+.bubble {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 30% 30%,
+    var(--neon-pink-light),
+    var(--neon-pink)
+  );
+  opacity: 0.3;
+  filter: blur(15px);
+  animation: floatBubble linear infinite;
+  z-index: -1;
 }
 
-#particles-js {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-    background: transparent;
+@keyframes floatBubble {
+  0% {
+    transform: translateY(0) translateX(0) scale(1);
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(-100vh) translateX(20px) scale(1.2);
+    opacity: 0;
+  }
 }
 
-#neon-grid {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: 
-        linear-gradient(rgba(127, 90, 240, 0.1) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(127, 90, 240, 0.1) 1px, transparent 1px);
-    background-size: 50px 50px;
-    z-index: -1;
-    animation: gridScroll 20s linear infinite;
+/* Create bubbles dynamically */
+.bubble:nth-child(1) {
+  width: 150px;
+  height: 150px;
+  left: 10%;
+  top: 80%;
+  animation-duration: 25s;
+  animation-delay: 0s;
+}
+.bubble:nth-child(2) {
+  width: 200px;
+  height: 200px;
+  left: 25%;
+  top: 70%;
+  animation-duration: 30s;
+  animation-delay: 5s;
+}
+.bubble:nth-child(3) {
+  width: 100px;
+  height: 100px;
+  left: 60%;
+  top: 90%;
+  animation-duration: 20s;
+  animation-delay: 2s;
+}
+.bubble:nth-child(4) {
+  width: 250px;
+  height: 250px;
+  left: 80%;
+  top: 60%;
+  animation-duration: 35s;
+  animation-delay: 7s;
+}
+.bubble:nth-child(5) {
+  width: 180px;
+  height: 180px;
+  left: 40%;
+  top: 85%;
+  animation-duration: 28s;
+  animation-delay: 3s;
 }
 
-@keyframes gridScroll {
-    0% { background-position: 0 0; }
-    100% { background-position: 50px 50px; }
+/* Neon Pink Dots Shooting Animation */
+.neon-dot {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--neon-pink);
+  box-shadow: 
+    0 0 10px var(--neon-pink),
+    0 0 20px var(--neon-pink),
+    0 0 30px var(--neon-pink);
+  animation: shootDot linear infinite;
+  z-index: -1;
 }
 
-#matrix-canvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-    opacity: 0.15;
+@keyframes shootDot {
+  0% {
+    transform: translateY(100vh) translateX(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100px) translateX(50px);
+    opacity: 0;
+  }
 }
 
-/* Quantum UI Components */
-.quantum-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    padding: 20px;
+/* Create shooting dots dynamically */
+.neon-dot:nth-child(6) {
+  left: 15%;
+  animation-duration: 3s;
+  animation-delay: 0s;
+}
+.neon-dot:nth-child(7) {
+  left: 30%;
+  animation-duration: 4s;
+  animation-delay: 1s;
+}
+.neon-dot:nth-child(8) {
+  left: 45%;
+  animation-duration: 3.5s;
+  animation-delay: 0.5s;
+}
+.neon-dot:nth-child(9) {
+  left: 60%;
+  animation-duration: 4.2s;
+  animation-delay: 1.2s;
+}
+.neon-dot:nth-child(10) {
+  left: 75%;
+  animation-duration: 3.8s;
+  animation-delay: 0.8s;
 }
 
-.quantum-screen {
-    display: none;
-    width: 100%;
-    max-width: 800px;
-    animation: quantumFadeIn 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+/* Dreamy UI Container */
+.dream-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+  perspective: 1000px;
 }
 
-.quantum-screen.active {
-    display: block;
+.dream-screen {
+  display: none;
+  width: 100%;
+  max-width: 800px;
+  animation: dreamyFadeIn 1.2s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-@keyframes quantumFadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(30px) rotateX(10deg);
-        filter: blur(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0) rotateX(0);
-        filter: blur(0);
-    }
+.dream-screen.active {
+  display: block;
 }
 
-.holographic-card {
-    background: var(--quantum-panel);
-    backdrop-filter: blur(16px) saturate(180%);
-    border-radius: 16px;
-    padding: 30px;
-    box-shadow: 
-        0 0 0 1px rgba(127, 90, 240, 0.3),
-        0 0 30px rgba(127, 90, 240, 0.1),
-        inset 0 0 20px rgba(127, 90, 240, 0.1);
-    width: 100%;
-    transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-    position: relative;
-    overflow: hidden;
-    border: 1px solid rgba(127, 90, 240, 0.2);
+@keyframes dreamyFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px) rotateX(10deg) scale(0.95);
+    filter: blur(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) rotateX(0) scale(1);
+    filter: blur(0);
+  }
 }
 
-.holographic-card::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: conic-gradient(
-        transparent 0deg,
-        transparent 90deg,
-        rgba(127, 90, 240, 0.1) 90deg,
-        rgba(127, 90, 240, 0.1) 180deg,
-        transparent 180deg,
-        transparent 270deg,
-        rgba(44, 182, 125, 0.1) 270deg,
-        rgba(44, 182, 125, 0.1) 360deg
-    );
-    animation: rotateHolo 20s linear infinite;
-    z-index: -1;
+/* Dreamy Card */
+.dream-card {
+  background: rgba(12, 12, 26, 0.4);
+  backdrop-filter: blur(20px) saturate(180%);
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 
+    0 0 30px rgba(255, 42, 109, 0.2),
+    inset 0 0 20px rgba(255, 126, 179, 0.1);
+  width: 100%;
+  transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255, 126, 179, 0.1);
 }
 
-@keyframes rotateHolo {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
+.dream-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 42, 109, 0.1) 0%,
+    transparent 70%
+  );
+  animation: rotateDream 60s linear infinite;
+  z-index: -1;
 }
 
-.holographic-card:hover {
-    transform: translateY(-5px) scale(1.01);
-    box-shadow: 
-        0 0 0 1px rgba(127, 90, 240, 0.5),
-        0 0 40px rgba(127, 90, 240, 0.2),
-        inset 0 0 30px rgba(127, 90, 240, 0.2);
+@keyframes rotateDream {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
-/* Typography */
-.neon-text {
-    font-family: 'Orbitron', sans-serif;
-    font-weight: 700;
-    text-transform: uppercase;
-    position: relative;
-    color: transparent;
-    -webkit-text-stroke: 1px var(--neon-pink);
-    text-shadow: 
-        0 0 5px var(--neon-pink),
-        0 0 10px var(--neon-pink),
-        0 0 20px var(--neon-pink),
-        0 0 40px var(--neon-blue);
-    animation: neonPulse 2s infinite alternate;
+.dream-card:hover {
+  transform: translateY(-5px) scale(1.01);
+  box-shadow: 
+    0 0 40px rgba(255, 42, 109, 0.3),
+    inset 0 0 30px rgba(255, 126, 179, 0.2);
 }
 
-.neon-text[data-text]::after {
-    content: attr(data-text);
-    position: absolute;
-    top: 0;
-    left: 0;
-    color: var(--neon-pink);
-    -webkit-text-stroke: 0;
-    opacity: 0.7;
-    z-index: -1;
+/* Dreamy Typography */
+.dream-title {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 500;
+  font-size: 2.5rem;
+  color: transparent;
+  background: linear-gradient(45deg, var(--neon-pink), var(--soft-purple));
+  -webkit-background-clip: text;
+  background-clip: text;
+  text-shadow: 
+    0 0 10px rgba(255, 42, 109, 0.3),
+    0 0 20px rgba(255, 42, 109, 0.2);
+  margin-bottom: 30px;
+  letter-spacing: 2px;
+  animation: neonPulse 3s infinite alternate;
 }
 
 @keyframes neonPulse {
-    from {
-        text-shadow: 
-            0 0 5px var(--neon-pink),
-            0 0 10px var(--neon-pink),
-            0 0 20px var(--neon-pink),
-            0 0 40px var(--neon-blue);
-    }
-    to {
-        text-shadow: 
-            0 0 10px var(--neon-pink),
-            0 0 20px var(--neon-pink),
-            0 0 30px var(--neon-pink),
-            0 0 50px var(--neon-blue);
-    }
+  from {
+    text-shadow: 
+      0 0 10px rgba(255, 42, 109, 0.3),
+      0 0 20px rgba(255, 42, 109, 0.2);
+  }
+  to {
+    text-shadow: 
+      0 0 15px rgba(255, 42, 109, 0.4),
+      0 0 30px rgba(255, 42, 109, 0.3),
+      0 0 45px rgba(255, 42, 109, 0.2);
+  }
 }
 
-.cyber-text {
-    font-family: 'Rajdhani', sans-serif;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    color: var(--quantum-text);
-    position: relative;
-    display: inline-block;
+.dream-text {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.6;
+  position: relative;
 }
 
-.cyber-text::after {
-    content: '';
-    position: absolute;
-    bottom: -5px;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background: linear-gradient(90deg, var(--quantum-primary), var(--quantum-secondary));
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.3s ease;
+/* Dreamy Buttons */
+.dream-btn {
+  display: inline-block;
+  background: linear-gradient(135deg, var(--neon-pink), var(--neon-pink-dark));
+  color: white;
+  border: none;
+  padding: 16px 32px;
+  margin: 15px 0;
+  border-radius: 50px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  box-shadow: 
+    0 5px 20px rgba(255, 42, 109, 0.4),
+    inset 0 0 10px rgba(255, 255, 255, 0.1);
 }
 
-.holographic-card:hover .cyber-text::after {
-    transform: scaleX(1);
+.dream-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(255, 255, 255, 0.3), 
+    transparent);
+  transition: 0.6s;
+  z-index: -1;
 }
 
-/* Quantum Buttons */
-.quantum-btn {
-    display: inline-block;
-    background: linear-gradient(135deg, var(--quantum-primary), var(--quantum-secondary));
-    color: var(--quantum-text);
-    border: none;
-    padding: 14px 28px;
-    margin: 12px 0;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 1rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-    position: relative;
-    overflow: hidden;
-    z-index: 1;
-    box-shadow: 
-        0 4px 15px rgba(127, 90, 240, 0.3),
-        inset 0 0 10px rgba(255, 255, 255, 0.1);
+.dream-btn:hover {
+  transform: translateY(-5px);
+  box-shadow: 
+    0 10px 30px rgba(255, 42, 109, 0.6),
+    inset 0 0 15px rgba(255, 255, 255, 0.2);
 }
 
-.quantum-btn::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, 
-        transparent, 
-        rgba(255, 255, 255, 0.2), 
-        transparent);
-    transition: 0.6s;
-    z-index: -1;
+.dream-btn:hover::before {
+  left: 100%;
 }
 
-.quantum-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 
-        0 8px 25px rgba(127, 90, 240, 0.4),
-        inset 0 0 15px rgba(255, 255, 255, 0.2);
+.dream-btn:active {
+  transform: translateY(2px);
 }
 
-.quantum-btn:hover::before {
-    left: 100%;
+/* Dreamy Inputs */
+.dream-input {
+  width: 100%;
+  padding: 18px 25px;
+  margin: 20px 0;
+  border: none;
+  border-radius: 50px;
+  background: rgba(12, 12, 26, 0.5);
+  color: white;
+  font-size: 1.1rem;
+  transition: all 0.5s ease;
+  backdrop-filter: blur(10px);
+  box-shadow: 
+    inset 0 0 15px rgba(255, 126, 179, 0.1),
+    0 0 15px rgba(255, 42, 109, 0.1);
+  border: 1px solid rgba(255, 126, 179, 0.2);
 }
 
-.quantum-btn:active {
-    transform: translateY(1px);
+.dream-input:focus {
+  outline: none;
+  background: rgba(12, 12, 26, 0.7);
+  box-shadow: 
+    inset 0 0 20px rgba(255, 126, 179, 0.2),
+    0 0 25px rgba(255, 42, 109, 0.2);
+  border: 1px solid rgba(255, 126, 179, 0.3);
 }
 
-.quantum-btn.pulse {
-    animation: quantumPulse 2s infinite;
+.dream-input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+  font-style: italic;
 }
 
-@keyframes quantumPulse {
-    0%, 100% {
-        box-shadow: 
-            0 0 0 0 rgba(127, 90, 240, 0.4),
-            0 4px 15px rgba(127, 90, 240, 0.3);
-    }
-    50% {
-        box-shadow: 
-            0 0 0 10px rgba(127, 90, 240, 0),
-            0 4px 15px rgba(127, 90, 240, 0.3);
-    }
-}
-
-/* Quantum Inputs */
-.quantum-input {
-    width: 100%;
-    padding: 15px 20px;
-    margin: 15px 0;
-    border: 1px solid rgba(127, 90, 240, 0.3);
-    border-radius: 8px;
-    background: rgba(22, 22, 26, 0.5);
-    color: var(--quantum-text);
-    font-size: 1rem;
-    transition: all 0.4s ease;
-    backdrop-filter: blur(5px);
-    box-shadow: 
-        inset 0 0 10px rgba(127, 90, 240, 0.1),
-        0 0 10px rgba(127, 90, 240, 0.1);
-}
-
-.quantum-input:focus {
-    outline: none;
-    border-color: var(--quantum-primary);
-    background: rgba(22, 22, 26, 0.7);
-    box-shadow: 
-        inset 0 0 15px rgba(127, 90, 240, 0.2),
-        0 0 20px rgba(127, 90, 240, 0.2);
-}
-
-.quantum-input::placeholder {
-    color: var(--quantum-highlight);
-    opacity: 0.7;
-}
-
-/* Quantum Stats */
-.cyber-stats {
-    display: flex;
-    justify-content: space-around;
-    margin: 25px 0;
-    gap: 15px;
-}
-
-.cyber-stat {
-    text-align: center;
-    padding: 15px;
-    background: rgba(22, 22, 26, 0.5);
-    border-radius: 12px;
-    flex: 1;
-    transition: all 0.4s ease;
-    backdrop-filter: blur(5px);
-    border: 1px solid rgba(127, 90, 240, 0.2);
-    box-shadow: 
-        inset 0 0 10px rgba(127, 90, 240, 0.1),
-        0 0 10px rgba(127, 90, 240, 0.1);
-}
-
-.cyber-stat:hover {
-    background: rgba(127, 90, 240, 0.1);
-    transform: translateY(-5px);
-    box-shadow: 
-        inset 0 0 15px rgba(127, 90, 240, 0.2),
-        0 0 20px rgba(127, 90, 240, 0.2);
-}
-
-.stat-value {
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--quantum-primary);
-    margin-bottom: 5px;
-    text-shadow: 0 0 10px rgba(127, 90, 240, 0.5);
-}
-
-.stat-label {
-    font-size: 0.9rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: var(--quantum-highlight);
-}
-
-/* Quantum Letters */
-.quantum-letters {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    justify-content: center;
-    margin: 30px 0;
+/* Dreamy Letters */
+.dream-letters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center;
+  margin: 40px 0;
 }
 
 .letter {
-    width: 60px;
-    height: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(135deg, var(--quantum-primary), var(--quantum-secondary));
-    color: white;
-    font-size: 1.8rem;
-    font-weight: bold;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-    box-shadow: 
-        0 5px 15px rgba(127, 90, 240, 0.3),
-        inset 0 0 10px rgba(255, 255, 255, 0.1);
-    text-transform: uppercase;
-    animation: quantumFloat 4s ease-in-out infinite;
-    position: relative;
-    overflow: hidden;
+  width: 70px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 42, 109, 0.2);
+  color: white;
+  font-size: 2rem;
+  font-weight: bold;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  box-shadow: 
+    0 0 20px rgba(255, 42, 109, 0.3),
+    inset 0 0 10px rgba(255, 255, 255, 0.1);
+  text-transform: uppercase;
+  animation: floatLetter 6s ease-in-out infinite;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255, 126, 179, 0.3);
 }
 
 .letter::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: linear-gradient(
-        to bottom right,
-        transparent,
-        transparent,
-        transparent,
-        rgba(255, 255, 255, 0.1),
-        transparent,
-        transparent,
-        transparent
-    );
-    transform: rotate(30deg);
-    animation: letterShine 3s infinite;
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    to bottom right,
+    transparent,
+    transparent,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent,
+    transparent,
+    transparent
+  );
+  transform: rotate(30deg);
+  animation: letterShine 4s infinite;
 }
 
-@keyframes quantumFloat {
-    0%, 100% { transform: translateY(0) rotate(0deg); }
-    50% { transform: translateY(-15px) rotate(5deg); }
+@keyframes floatLetter {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-20px) rotate(5deg); }
 }
 
 @keyframes letterShine {
-    0% { left: -100%; }
-    20% { left: 100%; }
-    100% { left: 100%; }
+  0% { left: -100%; }
+  20% { left: 100%; }
+  100% { left: 100%; }
 }
 
 .letter:hover {
-    transform: translateY(-8px) scale(1.1);
-    box-shadow: 
-        0 8px 25px rgba(127, 90, 240, 0.5),
-        inset 0 0 15px rgba(255, 255, 255, 0.2);
+  transform: translateY(-10px) scale(1.1);
+  box-shadow: 
+    0 0 30px rgba(255, 42, 109, 0.5),
+    inset 0 0 20px rgba(255, 255, 255, 0.2);
+  background: rgba(255, 42, 109, 0.3);
 }
 
-/* Quantum Input Group */
-.quantum-input-group {
-    display: flex;
-    gap: 12px;
-    margin: 25px 0;
+.letter.selected {
+  background: rgba(255, 42, 109, 0.4);
+  box-shadow: 
+    0 0 30px rgba(255, 42, 109, 0.6),
+    inset 0 0 20px rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
 }
 
-.quantum-input-group .quantum-input {
-    margin: 0;
-    flex: 1;
+/* Dreamy List */
+.dream-list {
+  max-height: 300px;
+  overflow-y: auto;
+  margin-top: 30px;
+  padding-right: 15px;
 }
 
-/* Quantum List */
-.quantum-list {
-    margin-top: 30px;
+.dream-list::-webkit-scrollbar {
+  width: 8px;
 }
 
-.word-list {
-    max-height: 200px;
-    overflow-y: auto;
-    margin-top: 15px;
-    padding-right: 10px;
+.dream-list::-webkit-scrollbar-track {
+  background: rgba(255, 42, 109, 0.1);
+  border-radius: 10px;
 }
 
-.word-list::-webkit-scrollbar {
-    width: 6px;
-}
-
-.word-list::-webkit-scrollbar-track {
-    background: rgba(127, 90, 240, 0.1);
-    border-radius: 10px;
-}
-
-.word-list::-webkit-scrollbar-thumb {
-    background: var(--quantum-primary);
-    border-radius: 10px;
+.dream-list::-webkit-scrollbar-thumb {
+  background: var(--neon-pink);
+  border-radius: 10px;
 }
 
 .word-item {
-    padding: 14px 18px;
-    margin: 10px 0;
-    background: rgba(22, 22, 26, 0.5);
-    border-radius: 8px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    transition: all 0.4s ease;
-    backdrop-filter: blur(5px);
-    border: 1px solid rgba(127, 90, 240, 0.2);
-    box-shadow: 
-        inset 0 0 10px rgba(127, 90, 240, 0.1),
-        0 0 10px rgba(127, 90, 240, 0.1);
+  padding: 18px 25px;
+  margin: 15px 0;
+  background: rgba(12, 12, 26, 0.4);
+  border-radius: 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.5s ease;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 126, 179, 0.1);
+  box-shadow: 
+    inset 0 0 15px rgba(255, 126, 179, 0.1),
+    0 0 15px rgba(255, 42, 109, 0.1);
 }
 
 .word-item:hover {
-    background: rgba(127, 90, 240, 0.1);
-    transform: translateX(5px);
-    box-shadow: 
-        inset 0 0 15px rgba(127, 90, 240, 0.2),
-        0 0 15px rgba(127, 90, 240, 0.2);
+  background: rgba(255, 42, 109, 0.2);
+  transform: translateX(10px);
+  box-shadow: 
+    inset 0 0 20px rgba(255, 126, 179, 0.2),
+    0 0 20px rgba(255, 42, 109, 0.2);
 }
 
 .word-score {
-    color: var(--quantum-accent);
-    font-weight: bold;
-    font-size: 1.2rem;
-    text-shadow: 0 0 5px rgba(255, 110, 108, 0.5);
+  color: var(--neon-pink-light);
+  font-weight: bold;
+  font-size: 1.3rem;
+  text-shadow: 0 0 10px rgba(255, 126, 179, 0.5);
 }
 
-/* Quantum Message */
-.quantum-message {
-    padding: 16px;
-    margin: 20px 0;
-    border-radius: 8px;
-    text-align: center;
-    animation: quantumFadeIn 0.5s ease;
-    backdrop-filter: blur(5px);
-    border: 1px solid rgba(127, 90, 240, 0.3);
-    box-shadow: 
-        inset 0 0 10px rgba(127, 90, 240, 0.1),
-        0 0 10px rgba(127, 90, 240, 0.1);
+/* Dreamy Message */
+.dream-message {
+  padding: 20px;
+  margin: 25px 0;
+  border-radius: 50px;
+  text-align: center;
+  animation: dreamyFadeIn 0.8s ease;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 126, 179, 0.3);
+  box-shadow: 
+    inset 0 0 15px rgba(255, 126, 179, 0.1),
+    0 0 15px rgba(255, 42, 109, 0.1);
 }
 
-.quantum-message.error {
-    background: rgba(255, 77, 109, 0.2);
-    border-color: var(--neon-pink);
-    text-shadow: 0 0 5px rgba(255, 42, 109, 0.3);
+.dream-message.error {
+  background: rgba(255, 42, 109, 0.2);
+  border-color: var(--neon-pink);
 }
 
-.quantum-message.success {
-    background: rgba(44, 182, 125, 0.2);
-    border-color: var(--quantum-secondary);
-    text-shadow: 0 0 5px rgba(44, 182, 125, 0.3);
-}
-
-.quantum-message.info {
-    background: rgba(255, 110, 108, 0.2);
-    border-color: var(--quantum-accent);
-    text-shadow: 0 0 5px rgba(255, 110, 108, 0.3);
+.dream-message.success {
+  background: rgba(179, 153, 255, 0.2);
+  border-color: var(--soft-purple);
 }
 
 .hidden {
-    display: none;
-}
-
-/* Cyber Info */
-.cyber-info {
-    margin: 30px 0;
-}
-
-.info-row {
-    display: flex;
-    justify-content: space-between;
-    padding: 14px 0;
-    border-bottom: 1px solid rgba(127, 90, 240, 0.2);
-}
-
-.info-label {
-    font-weight: 600;
-    color: var(--quantum-primary);
-    text-shadow: 0 0 5px rgba(127, 90, 240, 0.3);
-}
-
-.info-value {
-    font-weight: 500;
-    color: var(--quantum-text);
-}
-
-/* Quantum Options */
-.quantum-options {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+  display: none;
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
-    .holographic-card {
-        padding: 20px;
-    }
-    
-    .neon-text {
-        font-size: 1.8rem;
-    }
-    
-    .cyber-text {
-        font-size: 1.3rem;
-    }
-    
-    .quantum-letters {
-        gap: 8px;
-    }
-    
-    .letter {
-        width: 50px;
-        height: 50px;
-        font-size: 1.5rem;
-    }
-    
-    .quantum-input-group {
-        flex-direction: column;
-        gap: 12px;
-    }
-    
-    .cyber-stats {
-        flex-direction: column;
-        gap: 12px;
-    }
-    
-    .cyber-stat {
-        margin: 0;
-    }
+  .dream-card {
+    padding: 30px;
+  }
+  
+  .dream-title {
+    font-size: 2rem;
+  }
+  
+  .letter {
+    width: 60px;
+    height: 60px;
+    font-size: 1.8rem;
+  }
+  
+  .dream-input {
+    padding: 16px 20px;
+  }
+  
+  .dream-btn {
+    padding: 14px 28px;
+  }
 }
 
-/* Matrix Rain Effect */
-@keyframes matrixRain {
-    0% { transform: translateY(-100%); opacity: 1; }
-    80% { opacity: 1; }
-    100% { transform: translateY(100vh); opacity: 0; }
+/* 3D Soft Effect */
+.dream-card {
+  transform-style: preserve-3d;
 }
 
-/* Floating Particles */
-@keyframes floatParticle {
-    0%, 100% { transform: translate(0, 0); }
-    25% { transform: translate(5px, 5px); }
-    50% { transform: translate(0, 10px); }
-    75% { transform: translate(-5px, 5px); }
+.dream-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 126, 179, 0.1) 0%,
+    transparent 70%
+  );
+  transform: translateZ(-20px);
+  opacity: 0.5;
+  z-index: -2;
+  border-radius: 20px;
 }
