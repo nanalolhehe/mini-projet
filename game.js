@@ -54,6 +54,9 @@ const gameMessage = document.getElementById('game-message');
 const wordList = document.getElementById('word-list');
 const saveQuitBtn = document.getElementById('save-quit-btn');
 
+// Common French word endings that help form valid words
+const COMMON_ENDINGS = ["er", "ir", "re", "ez", "ons", "ent", "ais", "ait", "ant", "tion"];
+
 // Initialize the game
 function init() {
     loadUsers();
@@ -245,7 +248,7 @@ function startGame() {
     }
     
     gameState.level = currentUser.level;
-    gameState.letters = generateValidLetters(5 + gameState.level); // Changed to generateValidLetters
+    gameState.letters = generatePlayableLetters(5 + gameState.level);
     gameState.requiredWords = 2 + Math.floor(gameState.level / 3);
     gameState.minLength = 3 + Math.floor(gameState.level / 5);
     gameState.foundWords = [];
@@ -255,43 +258,39 @@ function startGame() {
     showScreen('game');
 }
 
-// Generate letters that can form at least one valid word
-function generateValidLetters(count) {
+// Generate letters that can form multiple valid words
+function generatePlayableLetters(count) {
     const vowels = "aeiou";
     const consonants = "bcdfghjklmnpqrstvwxyz";
     let letters = [];
-    let attempts = 0;
-    const maxAttempts = 100;
-
-    do {
-        letters = [];
-        // Ensure at least 2 vowels
-        for (let i = 0; i < 2; i++) {
-            letters.push(vowels[Math.floor(Math.random() * vowels.length)]);
-        }
-        // Fill the rest with consonants
-        for (let i = 2; i < count; i++) {
-            letters.push(consonants[Math.floor(Math.random() * consonants.length)]);
-        }
-        // Shuffle the letters
-        letters = shuffleArray(letters);
-        attempts++;
-    } while (attempts < maxAttempts && !canFormValidWord(letters));
-
-    return letters;
-}
-
-// Check if the letters can form at least one valid word
-function canFormValidWord(letters) {
-    // Check a subset of the dictionary for performance
-    const sampleSize = Math.min(100, frenchDict.length);
-    for (let i = 0; i < sampleSize; i++) {
-        const word = frenchDict[i];
-        if (word.length >= 3 && isValidWord(word, letters)) {
-            return true;
-        }
+    
+    // Ensure at least 40% vowels
+    const vowelCount = Math.max(2, Math.ceil(count * 0.4));
+    const consonantCount = count - vowelCount;
+    
+    // Add vowels
+    for (let i = 0; i < vowelCount; i++) {
+        letters.push(vowels[Math.floor(Math.random() * vowels.length)]);
     }
-    return false;
+    
+    // Add consonants
+    for (let i = 0; i < consonantCount; i++) {
+        letters.push(consonants[Math.floor(Math.random() * consonants.length)]);
+    }
+    
+    // Add one common ending to ensure word formation
+    const ending = COMMON_ENDINGS[Math.floor(Math.random() * COMMON_ENDINGS.length)];
+    for (let i = 0; i < ending.length && letters.length < count; i++) {
+        letters.push(ending[i]);
+    }
+    
+    // Fill remaining slots if needed
+    while (letters.length < count) {
+        letters.push(consonants[Math.floor(Math.random() * consonants.length)]);
+    }
+    
+    // Shuffle the letters
+    return shuffleArray(letters);
 }
 
 // Shuffle array
