@@ -5,7 +5,7 @@
     --dream-bg: #fff0f9;
     --dream-text: #5a3d5a;
     --dream-highlight: #ffd6f5;
-    --dream-card: rgba(255, 230, 250, 0.046);
+    --dream-card: rgba(255, 230, 250, 0);
     --dream-accent: #ff80d5;
 }
 
@@ -115,13 +115,13 @@ body {
     border-radius: 24px;
     padding: 40px;
     box-shadow: 
-        0 10px 50px rgba(255, 182, 230, 0.2),
-        inset 0 0 30px rgba(255, 230, 250, 0.3);
+        0 10px 50px rgba(255, 182, 230, 0),
+        inset 0 0 30px rgba(255, 230, 250, 0);
     width: 100%;
     transition: all 0.8s cubic-bezier(0.2, 0.8, 0.4, 1);
     position: relative;
     overflow: hidden;
-    border: 1px solid rgba(255, 182, 230, 0.2);
+    border: 1px solid rgba(255, 182, 230, 0);
 }
 
 .ethereal-card:hover {
