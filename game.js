@@ -1,8 +1,9 @@
-
+// Game Constants
 const MAX_USERS = 500;
-const SAVE_KEY = "frenchWordGameUsers";
+const SAVE_KEY = "frenchWordDreamUsers";
 const MIN_WORD_LENGTH = 2; 
 
+// Game State
 let users = [];
 let userCount = 0;
 let currentUser = null;
@@ -15,7 +16,7 @@ let gameState = {
     selectedLetters: [] 
 };
 
-// DOM elements
+// DOM Elements
 const screens = {
     login: document.getElementById('login-screen'),
     mainMenu: document.getElementById('main-menu'),
@@ -56,63 +57,109 @@ const gameMessage = document.getElementById('game-message');
 const wordList = document.getElementById('word-list');
 const saveQuitBtn = document.getElementById('save-quit-btn');
 
-// Common French word endings that help form valid words
+// French language patterns
 const COMMON_ENDINGS = ["er", "ir", "re", "ez", "ons", "ent", "ais", "ait", "ant", "tion", "ment", "age", "eur", "euse", "ique", "isme", "iste", "able", "ible", "ure", "if", "ive"];
 const COMMON_PREFIXES = ["de", "le", "la", "en", "un", "re", "in", "co", "pre", "par", "sur", "sous", "mal", "contre", "anti", "auto", "extra", "hyper", "inter", "mono"];
-
-// French vowels including accented characters
 const FRENCH_VOWELS = "aeiouyéèêâù";
 
 // Initialize the game
 function init() {
     loadUsers();
     setupEventListeners();
-    initParticles();
+    init3DBackground();
+    createBubbles();
     showScreen('login');
-    initMatrixRain();
 }
 
-// Initialize Matrix Rain effect
-function initMatrixRain() {
-    const canvas = document.getElementById('matrix-canvas');
-    if (!canvas) return;
+// Initialize 3D background
+function init3DBackground() {
+    const container = document.getElementById('threejs-bg');
+    if (!container) return;
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     
-    const ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    container.appendChild(renderer.domElement);
+
+    // Create soft pink particles
+    const particlesGeometry = new THREE.BufferGeometry();
+    const particleCount = 1000;
     
-    const katakana = '⁕    ≭    ⁕    ≭    ⁕    ≭    ⁕    ≭    ⁕    ≭    ⁕    ≭    ⁕    ≭    ⁕';
-    const latin = '   ';
-    const nums = '    ';
-    const alphabet = katakana + latin + nums;
+    const posArray = new Float32Array(particleCount * 3);
+    const colorArray = new Float32Array(particleCount * 3);
     
-    const fontSize = 16;
-    const columns = canvas.width / fontSize;
-    const rainDrops = [];
-    
-    for (let x = 0; x < columns; x++) {
-        rainDrops[x] = 1;
+    for (let i = 0; i < particleCount * 3; i++) {
+        posArray[i] = (Math.random() - 0.5) * 10;
+        colorArray[i] = 0.9 + Math.random() * 0.1; // Soft pink colors
     }
     
-    function draw() {
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+    particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+    particlesGeometry.setAttribute('color', new THREE.BufferAttribute(colorArray, 3));
+    
+    const particlesMaterial = new THREE.PointsMaterial({
+        size: 0.1,
+        transparent: true,
+        opacity: 0.8,
+        vertexColors: true,
+        blending: THREE.AdditiveBlending,
+        sizeAttenuation: true
+    });
+    
+    const particleMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+    scene.add(particleMesh);
+
+    camera.position.z = 3;
+
+    // Animation loop
+    function animate() {
+        requestAnimationFrame(animate);
         
-        ctx.fillStyle = '#0F0';
-        ctx.font = fontSize + 'px monospace';
+        particleMesh.rotation.x += 0.0005;
+        particleMesh.rotation.y += 0.0005;
         
-        for (let i = 0; i < rainDrops.length; i++) {
-            const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
-            ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
-            
-            if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-                rainDrops[i] = 0;
-            }
-            rainDrops[i]++;
-        }
+        renderer.render(scene, camera);
     }
     
-    setInterval(draw, 30);
+    animate();
+
+    // Handle resize
+    window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+}
+
+// Create floating bubbles
+function createBubbles() {
+    const container = document.getElementById('bubble-container');
+    if (!container) return;
+
+    // Clear existing bubbles
+    container.innerHTML = '';
+
+    // Create 15 bubbles of varying sizes
+    for (let i = 0; i < 15; i++) {
+        const bubble = document.createElement('div');
+        bubble.className = 'bubble';
+        
+        // Random size between 50px and 200px
+        const size = 50 + Math.random() * 150;
+        bubble.style.width = `${size}px`;
+        bubble.style.height = `${size}px`;
+        
+        // Random position
+        bubble.style.left = `${Math.random() * 100}vw`;
+        bubble.style.top = `${Math.random() * 100}vh`;
+        
+        // Random animation duration and delay
+        bubble.style.animationDuration = `${10 + Math.random() * 20}s`;
+        bubble.style.animationDelay = `-${Math.random() * 20}s`;
+        
+        container.appendChild(bubble);
+    }
 }
 
 // Show specific screen and hide others
@@ -176,30 +223,6 @@ function setupEventListeners() {
     saveQuitBtn.addEventListener('click', saveAndQuit);
 }
 
-// Initialize particles.js
-function initParticles() {
-    if (typeof particlesJS !== 'undefined') {
-        particlesJS('particles-js', {
-            particles: {
-                number: { value: 80, density: { enable: true, value_area: 800 } },
-                color: { value: "#7f5af0" },
-                shape: { type: "circle" },
-                opacity: { value: 0.5 },
-                size: { value: 3, random: true },
-                line_linked: { enable: true, distance: 150, color: "#7f5af0", opacity: 0.4, width: 1 },
-                move: { enable: true, speed: 2 }
-            },
-            interactivity: {
-                detect_on: "canvas",
-                events: {
-                    onhover: { enable: true, mode: "grab" },
-                    onclick: { enable: true, mode: "push" }
-                }
-            }
-        });
-    }
-}
-
 // Handle login
 function handleLogin() {
     const name = playerNameInput.value.trim();
@@ -232,7 +255,7 @@ function handleRegister() {
         return;
     }
     
-    if (isNaN(age)) {
+    if (isNaN(age) {
         showMessage(registerMessage, 'Please enter a valid age', 'error');
         return;
     }
@@ -378,14 +401,12 @@ function updateGameUI() {
         letterEl.className = 'letter';
         letterEl.textContent = letter.toUpperCase();
         letterEl.dataset.index = index;
-        letterEl.style.animation = `quantumFloat ${4 + Math.random() * 2}s ease-in-out infinite`;
+        letterEl.style.animationDuration = `${4 + Math.random() * 3}s`;
         
-        // Highlight if selected
         if (gameState.selectedLetters.includes(index)) {
             letterEl.classList.add('selected');
         }
         
-        // Add click handler
         letterEl.addEventListener('click', () => {
             toggleLetterSelection(index);
         });
@@ -413,15 +434,13 @@ function toggleLetterSelection(index) {
     const letterIndex = gameState.selectedLetters.indexOf(index);
     
     if (letterIndex === -1) {
-        // Add to selection
         gameState.selectedLetters.push(index);
     } else {
-        // Remove from selection
         gameState.selectedLetters.splice(letterIndex, 1);
     }
     
     updateWordInput();
-    updateGameUI(); // Refresh to show selected letters
+    updateGameUI();
 }
 
 // Update word input based on selected letters
@@ -442,12 +461,7 @@ function submitWord() {
         return;
     }
     
-    if (word === '0') {
-        saveAndQuit();
-        return;
-    }
-    
-    if (word === 'save') {
+    if (word === '0' || word === 'save') {
         saveAndQuit();
         return;
     }
@@ -496,7 +510,6 @@ function isValidWord(word, letters) {
     for (const char of word) {
         const index = availableLetters.indexOf(char);
         if (index === -1) {
-            // Check for uppercase version (just in case)
             const upperIndex = availableLetters.indexOf(char.toUpperCase());
             if (upperIndex === -1) return false;
             availableLetters.splice(upperIndex, 1);
@@ -572,7 +585,7 @@ function quitGame() {
 // Show message
 function showMessage(element, text, type) {
     element.textContent = text;
-    element.className = `quantum-message ${type}`;
+    element.className = `dream-message ${type}`;
     element.classList.remove('hidden');
     
     if (type !== 'error') {
@@ -601,9 +614,5 @@ document.addEventListener('DOMContentLoaded', init);
 
 // Handle window resize
 window.addEventListener('resize', () => {
-    const canvas = document.getElementById('matrix-canvas');
-    if (canvas) {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-    }
+    createBubbles(); // Recreate bubbles on resize for proper positioning
 });
