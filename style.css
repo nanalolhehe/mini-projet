@@ -1,167 +1,125 @@
 :root {
-    --neon-pink: #ff9bb3; /* Super light pink */
-    --neon-pink-light: #ffc0cb; /* Even lighter pink */
-    --neon-pink-glow: #ffdfe6; /* Lightest pink for glows */
-    --soft-purple: #e8cff8; /* Light purple */
-    --dreamy-blue: #d0d9ff; /* Light blue */
-    --bg-dark: #ffa5e8; /* Dark background */
-    --bg-light: #ffb8ea; /* Slightly lighter background */
-    --text-color: #225900; /* White text */
+    --quantum-primary: #7f5af0;
+    --quantum-secondary: #2cb67d;
+    --quantum-accent: #ff6e6c;
+    --quantum-bg: #16161a;
+    --quantum-text: #fffffe;
+    --quantum-highlight: #94a1b2;
+    --quantum-panel: rgba(22, 22, 26, 0.8);
+    --neon-pink: #ff2a6d;
+    --neon-blue: #05d9e8;
+    --neon-purple: #d300c5;
 }
 
-/* Base Reset */
+/* Quantum Base Styles */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: 'Rajdhani', 'Orbitron', sans-serif;
 }
 
 body {
-    background: linear-gradient(135deg, var(--bg-dark), var(--bg-light));
-    color: var(--text-color);
+    background-color: var(--quantum-bg);
+    color: var(--quantum-text);
     overflow: hidden;
     height: 100vh;
     perspective: 1000px;
-    font-family: 'Arial', sans-serif;
 }
 
-/* Dreamy Bubble Background */
-.bubble-container {
+#webgl-container {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     z-index: -2;
-    overflow: hidden;
 }
 
-.bubble {
-    position: absolute;
-    border-radius: 50%;
-    background: radial-gradient(circle, 
-        rgba(236, 195, 244, 0.849) 0%, 
-        rgba(241, 149, 234, 0.644) 70%);
-    box-shadow: 0 0 40px rgba(241, 174, 228, 0.655);
-    animation: float 15s infinite ease-in-out;
-    opacity: 0.8;
-    filter: blur(1px);
+#particles-js {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background: transparent;
 }
 
-@keyframes float {
-    0%, 100% {
-        transform: translateY(0) translateX(0) scale(1);
-    }
-    50% {
-        transform: translateY(-20vh) translateX(10vw) scale(1.1);
-    }
+#neon-grid {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        linear-gradient(rgba(127, 90, 240, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(127, 90, 240, 0.1) 1px, transparent 1px);
+    background-size: 50px 50px;
+    z-index: -1;
+    animation: gridScroll 20s linear infinite;
 }
 
-/* Neon Pink Dots Animation */
-.dot-container {
+@keyframes gridScroll {
+    0% { background-position: 0 0; }
+    100% { background-position: 50px 50px; }
+}
+
+#matrix-canvas {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     z-index: -1;
-    overflow: hidden;
+    opacity: 0.15;
 }
 
-.dot {
-    position: absolute;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--neon-pink);
-    box-shadow: 
-        0 0 10px var(--neon-pink-glow),
-        0 0 20px var(--neon-pink-glow),
-        0 0 30px var(--neon-pink-glow);
-    animation: shoot linear infinite;
-    opacity: 0;
-    filter: blur(0.5px);
-}
-
-@keyframes shoot {
-    0% {
-        transform: translateY(100vh) translateX(var(--start-x)) scale(0.5);
-        opacity: 0;
-    }
-    10% {
-        opacity: 1;
-    }
-    90% {
-        opacity: 1;
-    }
-    100% {
-        transform: translateY(var(--end-y)) translateX(var(--end-x)) scale(1.5);
-        opacity: 0;
-    }
-}
-
-/* Soft 3D Effect */
-.soft-3d {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -3;
-    background: radial-gradient(ellipse at center, 
-        rgba(237, 173, 243, 0.785) 0%, 
-        rgba(241, 154, 219, 0.9) 70%);
-    transform-style: preserve-3d;
-    animation: gentlePulse 12s infinite alternate;
-}
-
-@keyframes gentlePulse {
-    0% {
-        transform: scale(1) rotateX(0deg) rotateY(0deg);
-    }
-    100% {
-        transform: scale(1.05) rotateX(2deg) rotateY(2deg);
-    }
-}
-
-/* Content Styling - Now Visible! */
+/* Quantum UI Components */
 .quantum-container {
-    position: relative;
-    z-index: 1000; /* Higher than background elements */
-    width: 100%;
-    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
+    min-height: 100vh;
     padding: 20px;
-    isolation: isolate;
 }
 
 .quantum-screen {
     display: none;
     width: 100%;
     max-width: 800px;
-    
+    animation: quantumFadeIn 0.8s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .quantum-screen.active {
     display: block;
 }
 
+@keyframes quantumFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px) rotateX(10deg);
+        filter: blur(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) rotateX(0);
+        filter: blur(0);
+    }
+}
+
 .holographic-card {
-    background: rgba(232, 161, 249, 0.311); /* Semi-transparent light purple */
+    background: var(--quantum-panel);
     backdrop-filter: blur(16px) saturate(180%);
     border-radius: 16px;
     padding: 30px;
     box-shadow: 
-        0 0 0 1px rgba(246, 177, 193, 0.219),
-        0 0 30px rgba(255, 155, 178, 0),
-        inset 0 0 20px rgba(255, 192, 203, 0);
+        0 0 0 1px rgba(127, 90, 240, 0.3),
+        0 0 30px rgba(127, 90, 240, 0.1),
+        inset 0 0 20px rgba(127, 90, 240, 0.1);
     width: 100%;
     transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
     position: relative;
     overflow: hidden;
-    border: 1px solid rgba(255, 155, 178, 0.957);
+    border: 1px solid rgba(127, 90, 240, 0.2);
 }
 
 .holographic-card::before {
@@ -174,12 +132,12 @@ body {
     background: conic-gradient(
         transparent 0deg,
         transparent 90deg,
-        rgba(255, 155, 178, 0) 90deg,
-        rgba(255, 155, 179, 0.1) 180deg,
+        rgba(127, 90, 240, 0.1) 90deg,
+        rgba(127, 90, 240, 0.1) 180deg,
         transparent 180deg,
         transparent 270deg,
-        rgba(208, 217, 255, 0.1) 270deg,
-        rgba(208, 217, 255, 0.1) 360deg
+        rgba(44, 182, 125, 0.1) 270deg,
+        rgba(44, 182, 125, 0.1) 360deg
     );
     animation: rotateHolo 20s linear infinite;
     z-index: -1;
@@ -190,7 +148,15 @@ body {
     to { transform: rotate(360deg); }
 }
 
-/* Text Styles */
+.holographic-card:hover {
+    transform: translateY(-5px) scale(1.01);
+    box-shadow: 
+        0 0 0 1px rgba(127, 90, 240, 0.5),
+        0 0 40px rgba(127, 90, 240, 0.2),
+        inset 0 0 30px rgba(127, 90, 240, 0.2);
+}
+
+/* Typography */
 .neon-text {
     font-family: 'Orbitron', sans-serif;
     font-weight: 700;
@@ -199,10 +165,39 @@ body {
     color: transparent;
     -webkit-text-stroke: 1px var(--neon-pink);
     text-shadow: 
-        0 0 5px var(--neon-pink-glow),
-        0 0 10px var(--neon-pink-glow),
-        0 0 20px var(--neon-pink-glow);
+        0 0 5px var(--neon-pink),
+        0 0 10px var(--neon-pink),
+        0 0 20px var(--neon-pink),
+        0 0 40px var(--neon-blue);
     animation: neonPulse 2s infinite alternate;
+}
+
+.neon-text[data-text]::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    color: var(--neon-pink);
+    -webkit-text-stroke: 0;
+    opacity: 0.7;
+    z-index: -1;
+}
+
+@keyframes neonPulse {
+    from {
+        text-shadow: 
+            0 0 5px var(--neon-pink),
+            0 0 10px var(--neon-pink),
+            0 0 20px var(--neon-pink),
+            0 0 40px var(--neon-blue);
+    }
+    to {
+        text-shadow: 
+            0 0 10px var(--neon-pink),
+            0 0 20px var(--neon-pink),
+            0 0 30px var(--neon-pink),
+            0 0 50px var(--neon-blue);
+    }
 }
 
 .cyber-text {
@@ -210,16 +205,33 @@ body {
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 2px;
-    color: var(--text-color);
+    color: var(--quantum-text);
     position: relative;
     display: inline-block;
 }
 
-/* Buttons */
+.cyber-text::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, var(--quantum-primary), var(--quantum-secondary));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+}
+
+.holographic-card:hover .cyber-text::after {
+    transform: scaleX(1);
+}
+
+/* Quantum Buttons */
 .quantum-btn {
     display: inline-block;
-    background: linear-gradient(135deg, var(--neon-pink), var(--soft-purple));
-    color: var(--text-color);
+    background: linear-gradient(135deg, var(--quantum-primary), var(--quantum-secondary));
+    color: var(--quantum-text);
     border: none;
     padding: 14px 28px;
     margin: 12px 0;
@@ -234,28 +246,89 @@ body {
     overflow: hidden;
     z-index: 1;
     box-shadow: 
-        0 4px 15px rgb(255, 155, 178),
-        inset 0 0 10px rgb(255, 223, 230);
+        0 4px 15px rgba(127, 90, 240, 0.3),
+        inset 0 0 10px rgba(255, 255, 255, 0.1);
 }
 
-/* Inputs */
+.quantum-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.2), 
+        transparent);
+    transition: 0.6s;
+    z-index: -1;
+}
+
+.quantum-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 
+        0 8px 25px rgba(127, 90, 240, 0.4),
+        inset 0 0 15px rgba(255, 255, 255, 0.2);
+}
+
+.quantum-btn:hover::before {
+    left: 100%;
+}
+
+.quantum-btn:active {
+    transform: translateY(1px);
+}
+
+.quantum-btn.pulse {
+    animation: quantumPulse 2s infinite;
+}
+
+@keyframes quantumPulse {
+    0%, 100% {
+        box-shadow: 
+            0 0 0 0 rgba(127, 90, 240, 0.4),
+            0 4px 15px rgba(127, 90, 240, 0.3);
+    }
+    50% {
+        box-shadow: 
+            0 0 0 10px rgba(127, 90, 240, 0),
+            0 4px 15px rgba(127, 90, 240, 0.3);
+    }
+}
+
+/* Quantum Inputs */
 .quantum-input {
     width: 100%;
     padding: 15px 20px;
     margin: 15px 0;
-    border: 1px solid rgba(255, 155, 179, 0.3);
+    border: 1px solid rgba(127, 90, 240, 0.3);
     border-radius: 8px;
-    background: rgba(225, 155, 242, 0.5);
-    color: var(--text-color);
+    background: rgba(22, 22, 26, 0.5);
+    color: var(--quantum-text);
     font-size: 1rem;
     transition: all 0.4s ease;
     backdrop-filter: blur(5px);
     box-shadow: 
-        inset 0 0 10px rgba(251, 155, 178, 0.454),
-        0 0 10px rgba(255, 155, 178, 0.53);
+        inset 0 0 10px rgba(127, 90, 240, 0.1),
+        0 0 10px rgba(127, 90, 240, 0.1);
 }
 
-/* Stats */
+.quantum-input:focus {
+    outline: none;
+    border-color: var(--quantum-primary);
+    background: rgba(22, 22, 26, 0.7);
+    box-shadow: 
+        inset 0 0 15px rgba(127, 90, 240, 0.2),
+        0 0 20px rgba(127, 90, 240, 0.2);
+}
+
+.quantum-input::placeholder {
+    color: var(--quantum-highlight);
+    opacity: 0.7;
+}
+
+/* Quantum Stats */
 .cyber-stats {
     display: flex;
     justify-content: space-around;
@@ -266,45 +339,243 @@ body {
 .cyber-stat {
     text-align: center;
     padding: 15px;
-    background: rgba(223, 196, 230, 0.5);
+    background: rgba(22, 22, 26, 0.5);
     border-radius: 12px;
     flex: 1;
     transition: all 0.4s ease;
     backdrop-filter: blur(5px);
-    border: 1px solid rgba(238, 225, 228, 0.2);
+    border: 1px solid rgba(127, 90, 240, 0.2);
     box-shadow: 
-        inset 0 0 10px rgba(255, 155, 179, 0.1),
-        0 0 10px rgba(255, 155, 179, 0.1);
+        inset 0 0 10px rgba(127, 90, 240, 0.1),
+        0 0 10px rgba(127, 90, 240, 0.1);
 }
 
-/* Animations */
-@keyframes quantumFadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(30px) rotateX(10deg);
-        filter: blur(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0) rotateX(0);
-        filter: blur(0);
-    }
+.cyber-stat:hover {
+    background: rgba(127, 90, 240, 0.1);
+    transform: translateY(-5px);
+    box-shadow: 
+        inset 0 0 15px rgba(127, 90, 240, 0.2),
+        0 0 20px rgba(127, 90, 240, 0.2);
 }
 
-@keyframes neonPulse {
-    from {
-        text-shadow: 
-            0 0 5px var(--neon-pink-glow),
-            0 0 10px var(--neon-pink-glow),
-            0 0 20px var(--neon-pink-glow);
-    }
-    to {
-        text-shadow: 
-            0 0 10px var(--neon-pink-glow),
-            0 0 20px var(--neon-pink-glow),
-            0 0 30px var(--neon-pink-glow),
-            0 0 50px var(--dreamy-blue);
-    }
+.stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--quantum-primary);
+    margin-bottom: 5px;
+    text-shadow: 0 0 10px rgba(127, 90, 240, 0.5);
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--quantum-highlight);
+}
+
+/* Quantum Letters */
+.quantum-letters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    margin: 30px 0;
+}
+
+.letter {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--quantum-primary), var(--quantum-secondary));
+    color: white;
+    font-size: 1.8rem;
+    font-weight: bold;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    box-shadow: 
+        0 5px 15px rgba(127, 90, 240, 0.3),
+        inset 0 0 10px rgba(255, 255, 255, 0.1);
+    text-transform: uppercase;
+    animation: quantumFloat 4s ease-in-out infinite;
+    position: relative;
+    overflow: hidden;
+}
+
+.letter::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        to bottom right,
+        transparent,
+        transparent,
+        transparent,
+        rgba(255, 255, 255, 0.1),
+        transparent,
+        transparent,
+        transparent
+    );
+    transform: rotate(30deg);
+    animation: letterShine 3s infinite;
+}
+
+@keyframes quantumFloat {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-15px) rotate(5deg); }
+}
+
+@keyframes letterShine {
+    0% { left: -100%; }
+    20% { left: 100%; }
+    100% { left: 100%; }
+}
+
+.letter:hover {
+    transform: translateY(-8px) scale(1.1);
+    box-shadow: 
+        0 8px 25px rgba(127, 90, 240, 0.5),
+        inset 0 0 15px rgba(255, 255, 255, 0.2);
+}
+
+/* Quantum Input Group */
+.quantum-input-group {
+    display: flex;
+    gap: 12px;
+    margin: 25px 0;
+}
+
+.quantum-input-group .quantum-input {
+    margin: 0;
+    flex: 1;
+}
+
+/* Quantum List */
+.quantum-list {
+    margin-top: 30px;
+}
+
+.word-list {
+    max-height: 200px;
+    overflow-y: auto;
+    margin-top: 15px;
+    padding-right: 10px;
+}
+
+.word-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.word-list::-webkit-scrollbar-track {
+    background: rgba(127, 90, 240, 0.1);
+    border-radius: 10px;
+}
+
+.word-list::-webkit-scrollbar-thumb {
+    background: var(--quantum-primary);
+    border-radius: 10px;
+}
+
+.word-item {
+    padding: 14px 18px;
+    margin: 10px 0;
+    background: rgba(22, 22, 26, 0.5);
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.4s ease;
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(127, 90, 240, 0.2);
+    box-shadow: 
+        inset 0 0 10px rgba(127, 90, 240, 0.1),
+        0 0 10px rgba(127, 90, 240, 0.1);
+}
+
+.word-item:hover {
+    background: rgba(127, 90, 240, 0.1);
+    transform: translateX(5px);
+    box-shadow: 
+        inset 0 0 15px rgba(127, 90, 240, 0.2),
+        0 0 15px rgba(127, 90, 240, 0.2);
+}
+
+.word-score {
+    color: var(--quantum-accent);
+    font-weight: bold;
+    font-size: 1.2rem;
+    text-shadow: 0 0 5px rgba(255, 110, 108, 0.5);
+}
+
+/* Quantum Message */
+.quantum-message {
+    padding: 16px;
+    margin: 20px 0;
+    border-radius: 8px;
+    text-align: center;
+    animation: quantumFadeIn 0.5s ease;
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(127, 90, 240, 0.3);
+    box-shadow: 
+        inset 0 0 10px rgba(127, 90, 240, 0.1),
+        0 0 10px rgba(127, 90, 240, 0.1);
+}
+
+.quantum-message.error {
+    background: rgba(255, 77, 109, 0.2);
+    border-color: var(--neon-pink);
+    text-shadow: 0 0 5px rgba(255, 42, 109, 0.3);
+}
+
+.quantum-message.success {
+    background: rgba(44, 182, 125, 0.2);
+    border-color: var(--quantum-secondary);
+    text-shadow: 0 0 5px rgba(44, 182, 125, 0.3);
+}
+
+.quantum-message.info {
+    background: rgba(255, 110, 108, 0.2);
+    border-color: var(--quantum-accent);
+    text-shadow: 0 0 5px rgba(255, 110, 108, 0.3);
+}
+
+.hidden {
+    display: none;
+}
+
+/* Cyber Info */
+.cyber-info {
+    margin: 30px 0;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(127, 90, 240, 0.2);
+}
+
+.info-label {
+    font-weight: 600;
+    color: var(--quantum-primary);
+    text-shadow: 0 0 5px rgba(127, 90, 240, 0.3);
+}
+
+.info-value {
+    font-weight: 500;
+    color: var(--quantum-text);
+}
+
+/* Quantum Options */
+.quantum-options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
 /* Responsive Design */
@@ -321,13 +592,42 @@ body {
         font-size: 1.3rem;
     }
     
-    .cyber-stats {
-        flex-direction: column;
-        gap: 12px;
+    .quantum-letters {
+        gap: 8px;
+    }
+    
+    .letter {
+        width: 50px;
+        height: 50px;
+        font-size: 1.5rem;
     }
     
     .quantum-input-group {
         flex-direction: column;
         gap: 12px;
     }
+    
+    .cyber-stats {
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    .cyber-stat {
+        margin: 0;
+    }
+}
+
+/* Matrix Rain Effect */
+@keyframes matrixRain {
+    0% { transform: translateY(-100%); opacity: 1; }
+    80% { opacity: 1; }
+    100% { transform: translateY(100vh); opacity: 0; }
+}
+
+/* Floating Particles */
+@keyframes floatParticle {
+    0%, 100% { transform: translate(0, 0); }
+    25% { transform: translate(5px, 5px); }
+    50% { transform: translate(0, 10px); }
+    75% { transform: translate(-5px, 5px); }
 }
