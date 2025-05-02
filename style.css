@@ -141,7 +141,7 @@ body {
     display: none;
     width: 100%;
     max-width: 800px;
-    animation: quantumFadeIn 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    
 }
 
 .quantum-screen.active {
