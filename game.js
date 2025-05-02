@@ -60,7 +60,7 @@ const saveQuitBtn = document.getElementById('save-quit-btn');
 // French language patterns
 const COMMON_ENDINGS = ["er", "ir", "re", "ez", "ons", "ent", "ais", "ait", "ant", "tion", "ment", "age", "eur", "euse", "ique", "isme", "iste", "able", "ible", "ure", "if", "ive"];
 const COMMON_PREFIXES = ["de", "le", "la", "en", "un", "re", "in", "co", "pre", "par", "sur", "sous", "mal", "contre", "anti", "auto", "extra", "hyper", "inter", "mono"];
-const FRENCH_VOWELS = "aeiouyéèêâù";
+const FRENCH_VOWELS = "aeiouyéatrù";
 
 // Initialize the game
 function init() {
