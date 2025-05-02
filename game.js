@@ -71,40 +71,54 @@ function init() {
     showScreen('login');
 }
 
-// Initialize 3D background
+// Initialize 3D background with sparkles
 function init3DBackground() {
     const container = document.getElementById('threejs-bg');
     if (!container) return;
 
+    // Clear any existing canvas
+    while (container.firstChild) {
+        container.removeChild(container.firstChild);
+    }
+
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+    const renderer = new THREE.WebGLRenderer({ 
+        alpha: true, 
+        antialias: true,
+        powerPreference: "high-performance"
+    });
     
     renderer.setSize(window.innerWidth, window.innerHeight);
     container.appendChild(renderer.domElement);
 
-    // Create soft pink particles
+    // Create sparkle particles
     const particlesGeometry = new THREE.BufferGeometry();
-    const particleCount = 1000;
+    const particleCount = 1500;
     
     const posArray = new Float32Array(particleCount * 3);
     const colorArray = new Float32Array(particleCount * 3);
+    const sizeArray = new Float32Array(particleCount);
     
     for (let i = 0; i < particleCount * 3; i++) {
         posArray[i] = (Math.random() - 0.5) * 10;
-        colorArray[i] = 0.9 + Math.random() * 0.1; // Soft pink colors
+        colorArray[i] = 0.8 + Math.random() * 0.2; // Pinkish colors
+        if (i % 3 === 0) {
+            sizeArray[i/3] = Math.random() * 0.2 + 0.05;
+        }
     }
     
     particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
     particlesGeometry.setAttribute('color', new THREE.BufferAttribute(colorArray, 3));
+    particlesGeometry.setAttribute('size', new THREE.BufferAttribute(sizeArray, 1));
     
     const particlesMaterial = new THREE.PointsMaterial({
         size: 0.1,
+        sizeAttenuation: true,
         transparent: true,
         opacity: 0.8,
         vertexColors: true,
-        blending: THREE.AdditiveBlending,
-        sizeAttenuation: true
+        blending: THREE.AdditiveBlending
     });
     
     const particleMesh = new THREE.Points(particlesGeometry, particlesMaterial);
@@ -116,7 +130,7 @@ function init3DBackground() {
     function animate() {
         requestAnimationFrame(animate);
         
-        particleMesh.rotation.x += 0.0005;
+        particleMesh.rotation.x += 0.0003;
         particleMesh.rotation.y += 0.0005;
         
         renderer.render(scene, camera);
@@ -132,7 +146,7 @@ function init3DBackground() {
     });
 }
 
-// Create floating bubbles
+// Create floating bubbles with improved visuals
 function createBubbles() {
     const container = document.getElementById('bubble-container');
     if (!container) return;
@@ -140,23 +154,38 @@ function createBubbles() {
     // Clear existing bubbles
     container.innerHTML = '';
 
-    // Create 15 bubbles of varying sizes
-    for (let i = 0; i < 15; i++) {
+    // Create bubbles with better distribution
+    const bubbleCount = Math.floor(window.innerWidth / 50); // Adjust based on screen size
+    const colors = [
+        'rgba(255, 182, 230, 0.6)',
+        'rgba(230, 182, 255, 0.6)',
+        'rgba(182, 230, 255, 0.6)'
+    ];
+
+    for (let i = 0; i < bubbleCount; i++) {
         const bubble = document.createElement('div');
         bubble.className = 'bubble';
         
-        // Random size between 50px and 200px
-        const size = 50 + Math.random() * 150;
+        // Random size between 30px and 150px
+        const size = 30 + Math.random() * 120;
         bubble.style.width = `${size}px`;
         bubble.style.height = `${size}px`;
         
-        // Random position
-        bubble.style.left = `${Math.random() * 100}vw`;
-        bubble.style.top = `${Math.random() * 100}vh`;
+        // Random position with edge avoidance
+        bubble.style.left = `${10 + Math.random() * 80}vw`;
+        bubble.style.top = `${10 + Math.random() * 80}vh`;
         
-        // Random animation duration and delay
-        bubble.style.animationDuration = `${10 + Math.random() * 20}s`;
-        bubble.style.animationDelay = `-${Math.random() * 20}s`;
+        // Random color
+        bubble.style.background = colors[Math.floor(Math.random() * colors.length)];
+        
+        // Animation properties
+        const duration = 15 + Math.random() * 30;
+        const delay = -Math.random() * 30;
+        bubble.style.animation = `floatBubble ${duration}s ${delay}s infinite ease-in-out`;
+        
+        // Random blur and opacity
+        bubble.style.filter = `blur(${Math.random() * 3}px)`;
+        bubble.style.opacity = 0.3 + Math.random() * 0.4;
         
         container.appendChild(bubble);
     }
@@ -255,7 +284,7 @@ function handleRegister() {
         return;
     }
     
-    if (isNaN(age) {
+    if (isNaN(age)) {
         showMessage(registerMessage, 'Please enter a valid age', 'error');
         return;
     }
