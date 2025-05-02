@@ -1,10 +1,12 @@
 :root {
-    --neon-pink: #ff2a6d;
-    --neon-pink-light: #ff7eb3;
-    --soft-purple: #d8b4fe;
-    --dreamy-blue: #a5b4fc;
-    --bg-dark: #0f0e17;
-    --bg-light: #1a1a2e;
+    --neon-pink: #ff9bb3; /* Super light pink */
+    --neon-pink-light: #ffc0cb; /* Even lighter pink */
+    --neon-pink-glow: #ffdfe6; /* Lightest pink for glows */
+    --soft-purple: #e8cff8; /* Light purple */
+    --dreamy-blue: #d0d9ff; /* Light blue */
+    --bg-dark: #ffa5e8; /* Dark background */
+    --bg-light: #ffb8ea; /* Slightly lighter background */
+    --text-color: #225900; /* White text */
 }
 
 /* Base Reset */
@@ -16,7 +18,7 @@
 
 body {
     background: linear-gradient(135deg, var(--bg-dark), var(--bg-light));
-    color: white;
+    color: var(--text-color);
     overflow: hidden;
     height: 100vh;
     perspective: 1000px;
@@ -38,8 +40,8 @@ body {
     position: absolute;
     border-radius: 50%;
     background: radial-gradient(circle, 
-        rgba(255,255,255,0.1) 0%, 
-        rgba(255,255,255,0) 70%);
+        rgba(236, 195, 244, 0.212) 0%, 
+        rgba(231, 55, 217, 0.146) 70%);
     box-shadow: 0 0 40px rgba(255, 255, 255, 0.1);
     animation: float 15s infinite ease-in-out;
     opacity: 0.8;
@@ -73,12 +75,12 @@ body {
     border-radius: 50%;
     background: var(--neon-pink);
     box-shadow: 
-        0 0 10px var(--neon-pink),
-        0 0 20px var(--neon-pink),
-        0 0 30px var(--neon-pink);
+        0 0 10px var(--neon-pink-glow),
+        0 0 20px var(--neon-pink-glow),
+        0 0 30px var(--neon-pink-glow);
     animation: shoot linear infinite;
     opacity: 0;
-    filter: blur(1px);
+    filter: blur(0.5px);
 }
 
 @keyframes shoot {
@@ -107,8 +109,8 @@ body {
     height: 100%;
     z-index: -3;
     background: radial-gradient(ellipse at center, 
-        rgba(168, 85, 247, 0.1) 0%, 
-        rgba(10, 10, 20, 0.8) 70%);
+        rgba(209, 141, 251, 0.272) 0%, 
+        rgba(176, 88, 154, 0.9) 70%);
     transform-style: preserve-3d;
     animation: gentlePulse 12s infinite alternate;
 }
@@ -122,54 +124,209 @@ body {
     }
 }
 
-/* Content Styling */
-.content {
+/* Content Styling - Now Visible! */
+.quantum-container {
     position: relative;
-    z-index: 10;
-    padding: 2rem;
+    z-index: 1000; /* Higher than background elements */
+    width: 100%;
     height: 100vh;
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
-    text-align: center;
+    padding: 20px;
 }
 
-.dreamy-text {
-    font-size: 4rem;
-    font-weight: 300;
-    color: white;
+.quantum-screen {
+    display: none;
+    width: 100%;
+    max-width: 800px;
+    animation: quantumFadeIn 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.quantum-screen.active {
+    display: block;
+}
+
+.holographic-card {
+    background: rgba(42, 26, 46, 0); /* Semi-transparent light purple */
+    backdrop-filter: blur(16px) saturate(180%);
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 
+        0 0 0 1px rgba(255, 155, 178, 0),
+        0 0 30px rgba(255, 155, 178, 0),
+        inset 0 0 20px rgba(255, 192, 203, 0);
+    width: 100%;
+    transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(255, 155, 178, 0);
+}
+
+.holographic-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: conic-gradient(
+        transparent 0deg,
+        transparent 90deg,
+        rgba(255, 155, 178, 0) 90deg,
+        rgba(255, 155, 179, 0.1) 180deg,
+        transparent 180deg,
+        transparent 270deg,
+        rgba(208, 217, 255, 0.1) 270deg,
+        rgba(208, 217, 255, 0.1) 360deg
+    );
+    animation: rotateHolo 20s linear infinite;
+    z-index: -1;
+}
+
+@keyframes rotateHolo {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Text Styles */
+.neon-text {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    position: relative;
+    color: transparent;
+    -webkit-text-stroke: 1px var(--neon-pink);
     text-shadow: 
-        0 0 10px var(--soft-purple),
-        0 0 20px var(--dreamy-blue);
-    margin-bottom: 2rem;
-    animation: textGlow 3s infinite alternate;
+        0 0 5px var(--neon-pink-glow),
+        0 0 10px var(--neon-pink-glow),
+        0 0 20px var(--neon-pink-glow);
+    animation: neonPulse 2s infinite alternate;
 }
 
-@keyframes textGlow {
-    0% {
+.cyber-text {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-color);
+    position: relative;
+    display: inline-block;
+}
+
+/* Buttons */
+.quantum-btn {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--neon-pink), var(--soft-purple));
+    color: var(--text-color);
+    border: none;
+    padding: 14px 28px;
+    margin: 12px 0;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    box-shadow: 
+        0 4px 15px rgba(255, 155, 178, 0.169),
+        inset 0 0 10px rgba(255, 223, 230, 0.2);
+}
+
+/* Inputs */
+.quantum-input {
+    width: 100%;
+    padding: 15px 20px;
+    margin: 15px 0;
+    border: 1px solid rgba(255, 155, 179, 0.3);
+    border-radius: 8px;
+    background: rgba(214, 102, 243, 0.5);
+    color: var(--text-color);
+    font-size: 1rem;
+    transition: all 0.4s ease;
+    backdrop-filter: blur(5px);
+    box-shadow: 
+        inset 0 0 10px rgba(255, 155, 179, 0.1),
+        0 0 10px rgba(255, 155, 179, 0.1);
+}
+
+/* Stats */
+.cyber-stats {
+    display: flex;
+    justify-content: space-around;
+    margin: 25px 0;
+    gap: 15px;
+}
+
+.cyber-stat {
+    text-align: center;
+    padding: 15px;
+    background: rgba(42, 26, 46, 0.5);
+    border-radius: 12px;
+    flex: 1;
+    transition: all 0.4s ease;
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 155, 179, 0.2);
+    box-shadow: 
+        inset 0 0 10px rgba(255, 155, 179, 0.1),
+        0 0 10px rgba(255, 155, 179, 0.1);
+}
+
+/* Animations */
+@keyframes quantumFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px) rotateX(10deg);
+        filter: blur(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) rotateX(0);
+        filter: blur(0);
+    }
+}
+
+@keyframes neonPulse {
+    from {
         text-shadow: 
-            0 0 10px var(--soft-purple),
-            0 0 20px var(--dreamy-blue);
+            0 0 5px var(--neon-pink-glow),
+            0 0 10px var(--neon-pink-glow),
+            0 0 20px var(--neon-pink-glow);
     }
-    100% {
+    to {
         text-shadow: 
-            0 0 20px var(--soft-purple),
-            0 0 40px var(--dreamy-blue),
-            0 0 60px var(--neon-pink-light);
+            0 0 10px var(--neon-pink-glow),
+            0 0 20px var(--neon-pink-glow),
+            0 0 30px var(--neon-pink-glow),
+            0 0 50px var(--dreamy-blue);
     }
 }
 
-/* Floating Elements */
-.floating {
-    animation: floatElement 8s infinite ease-in-out;
-}
-
-@keyframes floatElement {
-    0%, 100% {
-        transform: translateY(0) rotate(0deg);
+/* Responsive Design */
+@media (max-width: 768px) {
+    .holographic-card {
+        padding: 20px;
     }
-    50% {
-        transform: translateY(-20px) rotate(5deg);
+    
+    .neon-text {
+        font-size: 1.8rem;
+    }
+    
+    .cyber-text {
+        font-size: 1.3rem;
+    }
+    
+    .cyber-stats {
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    .quantum-input-group {
+        flex-direction: column;
+        gap: 12px;
     }
 }
