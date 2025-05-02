@@ -58,9 +58,9 @@ const wordList = document.getElementById('word-list');
 const saveQuitBtn = document.getElementById('save-quit-btn');
 
 // French language patterns
-const COMMON_ENDINGS = ["er", "ir", "re", "ez", "ons", "ent", "ais", "ait", "ant", "tion", "ment", "age", "eur", "euse", "ique", "isme", "iste", "able", "ible", "ure", "if", "ive"];
+const COMMON_ENDINGS = ["er", "ir", "re", "ez", "ons", "ent", "ais", "ait", "ant", "tion", "ment", "age", "eur", "euse", "ù", "isme", "é", "able", "ible", "ure", "if", "ive"];
 const COMMON_PREFIXES = ["de", "le", "la", "en", "un", "re", "in", "co", "pre", "par", "sur", "sous", "mal", "contre", "anti", "auto", "extra", "hyper", "inter", "mono"];
-const FRENCH_VOWELS = "aeiouyéatrù";
+const FRENCH_VOWELS = "aeiou";
 
 // Initialize the game
 function init() {
