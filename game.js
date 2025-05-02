@@ -1,7 +1,7 @@
-// Game state
+
 const MAX_USERS = 500;
 const SAVE_KEY = "frenchWordGameUsers";
-const MIN_WORD_LENGTH = 2; // Minimum 2-letter words allowed
+const MIN_WORD_LENGTH = 2; 
 
 let users = [];
 let userCount = 0;
@@ -12,7 +12,7 @@ let gameState = {
     requiredWords: 3,
     minLength: 3,
     level: 1,
-    selectedLetters: [] // Track selected letters for word formation
+    selectedLetters: [] 
 };
 
 // DOM elements
@@ -61,7 +61,7 @@ const COMMON_ENDINGS = ["er", "ir", "re", "ez", "ons", "ent", "ais", "ait", "ant
 const COMMON_PREFIXES = ["de", "le", "la", "en", "un", "re", "in", "co", "pre", "par", "sur", "sous", "mal", "contre", "anti", "auto", "extra", "hyper", "inter", "mono"];
 
 // French vowels including accented characters
-const FRENCH_VOWELS = "aeiouyéèêàâù";
+const FRENCH_VOWELS = "aeiouyéèêâù";
 
 // Initialize the game
 function init() {
@@ -81,9 +81,9 @@ function initMatrixRain() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     
-    const katakana = '⁕  ≭  ⁕  ≭  ⁕  ≭  ⁕  ≭  ⁕  ≭  ⁕  ≭  ⁕  ≭  ⁕';
-    const latin = '';
-    const nums = '🫧';
+    const katakana = '⁕    ≭    ⁕    ≭    ⁕    ≭    ⁕    ≭    ⁕    ≭    ⁕    ≭    ⁕    ≭    ⁕';
+    const latin = '   ';
+    const nums = '    ';
     const alphabet = katakana + latin + nums;
     
     const fontSize = 16;
