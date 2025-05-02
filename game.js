@@ -61,7 +61,7 @@ const COMMON_ENDINGS = ["er", "ir", "re", "ez", "ons", "ent", "ais", "ait", "ant
 const COMMON_PREFIXES = ["de", "le", "la", "en", "un", "re", "in", "co", "pre", "par", "sur", "sous", "mal", "contre", "anti", "auto", "extra", "hyper", "inter", "mono"];
 
 // French vowels including accented characters
-const FRENCH_VOWELS = "aeiouyéèêëàâùûüîïôœ";
+const FRENCH_VOWELS = "aeiouyéèêàâù";
 
 // Initialize the game
 function init() {
@@ -81,9 +81,9 @@ function initMatrixRain() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     
-    const katakana = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッン';
-    const latin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    const nums = '0123456789';
+    const katakana = '⁕  ≭  ⁕  ≭  ⁕  ≭  ⁕  ≭  ⁕  ≭  ⁕  ≭  ⁕  ≭  ⁕';
+    const latin = '';
+    const nums = '🫧';
     const alphabet = katakana + latin + nums;
     
     const fontSize = 16;
