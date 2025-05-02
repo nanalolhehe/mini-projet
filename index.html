@@ -9,22 +9,8 @@
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.min.js"></script>
     <script src="french-dictionary.js" defer></script>
     <script src="game.js" defer></script>
-    <style>
-        /* Temporary inline styles until style.css is loaded */
-        body {
-            margin: 0;
-            overflow: hidden;
-            background: #0f0e17;
-        }
-    </style>
 </head>
 <body>
-    <!-- Dreamy Background Elements -->
-    <div class="soft-3d"></div>
-    <div class="bubble-container"></div>
-    <div class="dot-container"></div>
-    
-    <!-- Original Game Elements -->
     <div id="webgl-container"></div>
     <div id="particles-js"></div>
     <div id="neon-grid"></div>
@@ -32,7 +18,7 @@
     <div class="quantum-container">
         <!-- Login Screen -->
         <div id="login-screen" class="quantum-screen active">
-            <div class="holographic-card floating">
+            <div class="holographic-card">
                 <h1 class="neon-text" data-text="FRENCH WORD GAME">FRENCH WORD GAME</h1>
                 <div id="login-form">
                     <h2 class="cyber-text">ENTER YOUR IDENTITY</h2>
@@ -53,7 +39,7 @@
 
         <!-- Main Menu -->
         <div id="main-menu" class="quantum-screen">
-            <div class="holographic-card floating">
+            <div class="holographic-card">
                 <h1 class="neon-text">WELCOME, <span id="welcome-name"></span></h1>
                 <div class="cyber-stats">
                     <div class="cyber-stat">
@@ -76,7 +62,7 @@
 
         <!-- Profile Screen -->
         <div id="profile-screen" class="quantum-screen">
-            <div class="holographic-card floating">
+            <div class="holographic-card">
                 <h1 class="neon-text">USER PROFILE</h1>
                 <div class="cyber-info">
                     <div class="info-row">
@@ -102,7 +88,7 @@
 
         <!-- Game Screen -->
         <div id="game-screen" class="quantum-screen">
-            <div class="holographic-card floating">
+            <div class="holographic-card">
                 <div class="game-header">
                     <h2 class="cyber-text">LEVEL <span id="current-level">1</span></h2>
                     <div class="cyber-stats">
@@ -142,83 +128,5 @@
 
     <canvas id="matrix-canvas"></canvas>
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-    
-    <script>
-        // Dreamy Background Animation
-        document.addEventListener('DOMContentLoaded', function() {
-            // Create dreamy bubbles
-            const bubbleContainer = document.querySelector('.bubble-container');
-            for (let i = 0; i < 15; i++) {
-                const bubble = document.createElement('div');
-                bubble.classList.add('bubble');
-                
-                // Random size between 50px and 200px
-                const size = Math.random() * 150 + 50;
-                bubble.style.width = `${size}px`;
-                bubble.style.height = `${size}px`;
-                
-                // Random position
-                bubble.style.left = `${Math.random() * 100}vw`;
-                bubble.style.top = `${Math.random() * 100}vh`;
-                
-                // Random animation duration and delay
-                bubble.style.animationDuration = `${Math.random() * 10 + 10}s`;
-                bubble.style.animationDelay = `${Math.random() * 5}s`;
-                
-                bubbleContainer.appendChild(bubble);
-            }
-            
-            // Create shooting neon pink dots
-            const dotContainer = document.querySelector('.dot-container');
-            function createDot() {
-                const dot = document.createElement('div');
-                dot.classList.add('dot');
-                
-                // Random start position (bottom of screen)
-                const startX = Math.random() * 100;
-                dot.style.setProperty('--start-x', `${startX}vw`);
-                
-                // Random end position (somewhere above)
-                const endX = startX + (Math.random() * 20 - 10);
-                dot.style.setProperty('--end-x', `${endX}vw`);
-                
-                const endY = -Math.random() * 100 - 50;
-                dot.style.setProperty('--end-y', `${endY}vh`);
-                
-                // Random animation duration (1-3s)
-                const duration = Math.random() * 2 + 1;
-                dot.style.animationDuration = `${duration}s`;
-                
-                // Random size
-                const size = Math.random() * 6 + 4;
-                dot.style.width = `${size}px`;
-                dot.style.height = `${size}px`;
-                
-                // Random opacity
-                dot.style.opacity = Math.random() * 0.7 + 0.3;
-                
-                dotContainer.appendChild(dot);
-                
-                // Remove dot after animation completes
-                setTimeout(() => {
-                    dot.remove();
-                }, duration * 1000);
-            }
-            
-            // Create new dots every 200ms
-            setInterval(createDot, 200);
-            
-            // Initial dots
-            for (let i = 0; i < 10; i++) {
-                setTimeout(createDot, i * 200);
-            }
-            
-            // Add floating effect to all cards
-            const cards = document.querySelectorAll('.holographic-card');
-            cards.forEach((card, index) => {
-                card.style.animationDelay = `${index * 0.2}s`;
-            });
-        });
-    </script>
 </body>
 </html>
