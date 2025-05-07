@@ -1,9 +1,9 @@
-// Game Constants
+// Var
 const MAX_USERS = 500;
 const SAVE_KEY = "frenchWordDreamUsers";
 const MIN_WORD_LENGTH = 2; 
 
-// Game State
+// State
 let users = [];
 let userCount = 0;
 let currentUser = null;
@@ -16,7 +16,7 @@ let gameState = {
     selectedLetters: [] 
 };
 
-// DOM Elements
+// DOM 
 const screens = {
     login: document.getElementById('login-screen'),
     mainMenu: document.getElementById('main-menu'),
@@ -57,9 +57,9 @@ const gameMessage = document.getElementById('game-message');
 const wordList = document.getElementById('word-list');
 const saveQuitBtn = document.getElementById('save-quit-btn');
 
-// French Language Configuration
+// French Language blabla
 const FRENCH_LANGUAGE_CONFIG = {
-    // Vowels with frequency weights
+
     VOWELS: {
         'e': 8,  
         'a': 7,
@@ -68,8 +68,7 @@ const FRENCH_LANGUAGE_CONFIG = {
         'u': 3,
         'y': 2    
     },
-    
-    // Consonants with frequency weights
+ 
     CONSONANTS: {
         's': 8,   
         'n': 7,
@@ -94,7 +93,7 @@ const FRENCH_LANGUAGE_CONFIG = {
         'w': 0.5   
     },
     
-    // Common word parts
+    // Common 
     COMMON_ENDINGS: [
         "er", "ir", "re", "ez", "ent", "ant", "tion", 
         "ment", "age", "ois", "ais", "uit", "eur", "ien"
@@ -105,21 +104,21 @@ const FRENCH_LANGUAGE_CONFIG = {
         "par", "sur", "sous", "entre", "trans", "anti"
     ],
     
-    // Special letter combinations
+    // Special combinations
     LIAISONS: [
         "t", "z", "n", "s", "d", "x"  
     ],
     
-    // Generate letter frequency distribution
+    // frequency 
     getLetterFrequency() {
         const frequency = {};
         
-        // Add vowels with their weights
+        // Add vowels 
         Object.entries(this.VOWELS).forEach(([vowel, weight]) => {
             frequency[vowel] = weight;
         });
         
-        // Add consonants with their weights
+        // consonants 
         Object.entries(this.CONSONANTS).forEach(([consonant, weight]) => {
             frequency[consonant] = weight;
         });
@@ -127,13 +126,13 @@ const FRENCH_LANGUAGE_CONFIG = {
         return frequency;
     },
     
-    // Get random letters based on French frequency
+    // Get random letters 
     getWeightedRandomLetters(count) {
         const frequency = this.getLetterFrequency();
         const letters = [];
         const totalWeight = Object.values(frequency).reduce((a, b) => a + b, 0);
         
-        // Ensure at least 35% vowels
+        // a lot % vowels
         const vowelCount = Math.max(2, Math.ceil(count * 0.35));
         const consonantCount = count - vowelCount;
         
@@ -153,7 +152,7 @@ const FRENCH_LANGUAGE_CONFIG = {
     }
 };
 
-// Initialize the game
+// Initialize 
 function init() {
     loadUsers();
     setupEventListeners();
@@ -162,12 +161,12 @@ function init() {
     showScreen('login');
 }
 
-// Initialize 3D background with sparkles
+// Initialize 3D background (sparkles)
 function init3DBackground() {
     const container = document.getElementById('threejs-bg');
     if (!container) return;
 
-    // Clear any existing canvas
+    // Clear existing canvas
     while (container.firstChild) {
         container.removeChild(container.firstChild);
     }
@@ -193,7 +192,7 @@ function init3DBackground() {
     
     for (let i = 0; i < particleCount * 3; i++) {
         posArray[i] = (Math.random() - 0.5) * 10;
-        colorArray[i] = 0.8 + Math.random() * 0.2; // Pinkish colors
+        colorArray[i] = 0.8 + Math.random() * 0.2; 
         if (i % 3 === 0) {
             sizeArray[i/3] = Math.random() * 0.2 + 0.05;
         }
@@ -237,16 +236,16 @@ function init3DBackground() {
     });
 }
 
-// Create floating bubbles with improved visuals
+// Cree floating bubbles 
 function createBubbles() {
     const container = document.getElementById('bubble-container');
     if (!container) return;
 
-    // Clear existing bubbles
+    // Clear bubbles
     container.innerHTML = '';
 
-    // Create bubbles with better distribution
-    const bubbleCount = Math.floor(window.innerWidth / 50); // Adjust based on screen size
+    // Create bubbles better 
+    const bubbleCount = Math.floor(window.innerWidth / 50); 
     const colors = [
         'rgba(255, 182, 230, 0.6)',
         'rgba(230, 182, 255, 0.6)',
@@ -257,24 +256,24 @@ function createBubbles() {
         const bubble = document.createElement('div');
         bubble.className = 'bubble';
         
-        // Random size between 30px and 150px
+        // Random size 
         const size = 30 + Math.random() * 120;
         bubble.style.width = `${size}px`;
         bubble.style.height = `${size}px`;
         
-        // Random position with edge avoidance
+        // Random position 
         bubble.style.left = `${10 + Math.random() * 80}vw`;
         bubble.style.top = `${10 + Math.random() * 80}vh`;
         
         // Random color
         bubble.style.background = colors[Math.floor(Math.random() * colors.length)];
         
-        // Animation properties
+        // Animation propertees
         const duration = 15 + Math.random() * 30;
         const delay = -Math.random() * 30;
         bubble.style.animation = `floatBubble ${duration}s ${delay}s infinite ease-in-out`;
         
-        // Random blur and opacity
+        // Random blur / opacity
         bubble.style.filter = `blur(${Math.random() * 3}px)`;
         bubble.style.opacity = 0.3 + Math.random() * 0.4;
         
@@ -282,7 +281,7 @@ function createBubbles() {
     }
 }
 
-// Show specific screen and hide others
+// Show specific screen and hide tiyit
 function showScreen(screenName) {
     Object.keys(screens).forEach(key => {
         if (key === screenName) {
@@ -401,7 +400,7 @@ function handleRegister() {
     showMainMenu();
 }
 
-// Find user by name
+// Find user by name local google kan
 function findUser(name) {
     return users.find(user => user.name.toLowerCase() === name.toLowerCase());
 }
@@ -456,12 +455,12 @@ function startGame() {
     showScreen('game');
 }
 
-// Generate letters that can form multiple valid words
+//  letters that can form multiple VALIDDDDDDDDDDDD words
 function generatePlayableLetters(count) {
-    // Get weighted random letters respecting French frequencies
+   
     let letters = FRENCH_LANGUAGE_CONFIG.getWeightedRandomLetters(count - 2);
     
-    // Add one common prefix or ending (30% chance)
+    // Add one common sheesh
     if (Math.random() < 0.3) {
         const commonParts = [...FRENCH_LANGUAGE_CONFIG.COMMON_PREFIXES, 
                             ...FRENCH_LANGUAGE_CONFIG.COMMON_ENDINGS];
@@ -469,7 +468,7 @@ function generatePlayableLetters(count) {
         letters.push(...commonPart.split(''));
     }
     
-    // Fill remaining slots if needed
+    // Fill remaining slots 
     while (letters.length < count) {
         const charSet = Math.random() > 0.5 ? 
             Object.keys(FRENCH_LANGUAGE_CONFIG.VOWELS) : 
@@ -478,7 +477,7 @@ function generatePlayableLetters(count) {
     }
     
     // Shuffle the letters
-    return shuffleArray(letters).slice(0, count); // Ensure exact count
+    return shuffleArray(letters).slice(0, count); 
 }
 
 // Shuffle array
@@ -490,7 +489,7 @@ function shuffleArray(array) {
     return array;
 }
 
-// Update game UI
+// UI
 function updateGameUI() {
     if (!currentUser) return;
     
@@ -547,7 +546,7 @@ function toggleLetterSelection(index) {
     updateGameUI();
 }
 
-// Update word input based on selected letters
+// Update word input baalal
 function updateWordInput() {
     const word = gameState.selectedLetters
         .map(index => gameState.letters[index])
@@ -607,7 +606,7 @@ function submitWord() {
     }
 }
 
-// Check if word is valid (uses only given letters)
+// Check if word is valid 
 function isValidWord(word, letters) {
     const availableLetters = [...letters];
     
@@ -625,15 +624,15 @@ function isValidWord(word, letters) {
     return true;
 }
 
-// Check if word is in dictionary (binary search)
+// Check word g dictionary 
 function isWordInDictionary(word) {
-    // First check if it's a very short word (2 letters)
+    // check ma 2 kan letters
     if (word.length === 2) {
         const commonTwoLetterWords = ["de", "le", "la", "en", "un", "à", "et", "ou", "si", "il", "du", "au", "ce", "ça"];
         return commonTwoLetterWords.includes(word);
     }
     
-    // Then check the full dictionary
+    //  check ikkel dictionary
     let left = 0;
     let right = frenchDict.length - 1;
     
@@ -708,15 +707,15 @@ function loadUsers() {
     }
 }
 
-// Save users to localStorage
+// Save users gh localStorage
 function saveUsers() {
     localStorage.setItem(SAVE_KEY, JSON.stringify(users));
 }
 
-// Initialize the game when DOM is loaded
+// Initialize the anechta asma DOM ittwahemel
 document.addEventListener('DOMContentLoaded', init);
 
 // Handle window resize
 window.addEventListener('resize', () => {
-    createBubbles(); // Recreate bubbles on resize for proper positioning
+    createBubbles(); 
 });
