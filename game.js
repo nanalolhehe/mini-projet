@@ -61,17 +61,17 @@ const saveQuitBtn = document.getElementById('save-quit-btn');
 const FRENCH_LANGUAGE_CONFIG = {
     // Vowels with frequency weights
     VOWELS: {
-        'e': 12,  // Most common in French
+        'e': 8,  
         'a': 7,
         'i': 6,
         'o': 5,
         'u': 3,
-        'y': 2    // Sometimes considered a vowel
+        'y': 2    
     },
     
     // Consonants with frequency weights
     CONSONANTS: {
-        's': 8,   // Very common
+        's': 8,   
         'n': 7,
         't': 7,
         'r': 6,
@@ -90,8 +90,8 @@ const FRENCH_LANGUAGE_CONFIG = {
         'x': 1,
         'z': 1,
         'ç': 1,
-        'k': 0.5,  // Rare in French
-        'w': 0.5   // Rare in French
+        'k': 0.5,  
+        'w': 0.5   
     },
     
     // Common word parts
@@ -107,7 +107,7 @@ const FRENCH_LANGUAGE_CONFIG = {
     
     // Special letter combinations
     LIAISONS: [
-        "t", "z", "n", "s", "d", "x"  // Letters that often create liaisons
+        "t", "z", "n", "s", "d", "x"  
     ],
     
     // Generate letter frequency distribution
@@ -133,7 +133,7 @@ const FRENCH_LANGUAGE_CONFIG = {
         const letters = [];
         const totalWeight = Object.values(frequency).reduce((a, b) => a + b, 0);
         
-        // Ensure at least 35% vowels (French typically has 35-40% vowels)
+        // Ensure at least 35% vowels
         const vowelCount = Math.max(2, Math.ceil(count * 0.35));
         const consonantCount = count - vowelCount;
         
