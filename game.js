@@ -137,17 +137,7 @@ const FRENCH_LANGUAGE_CONFIG = {
         const vowelCount = Math.max(2, Math.ceil(count * 0.35));
         const consonantCount = count - vowelCount;
         
-        // Helper function to get weighted random letter
-        const getWeightedLetter = (letterSet) => {
-            let random = Math.random() * totalWeight;
-            for (const [letter, weight] of Object.entries(frequency)) {
-                if (letterSet.includes(letter)) {
-                    random -= weight;
-                    if (random <= 0) return letter;
-                }
-            }
-            return 'e'; // Fallback to most common letter
-        };
+
         
         // Add vowels
         for (let i = 0; i < vowelCount; i++) {
