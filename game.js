@@ -57,10 +57,111 @@ const gameMessage = document.getElementById('game-message');
 const wordList = document.getElementById('word-list');
 const saveQuitBtn = document.getElementById('save-quit-btn');
 
-// French language patterns
-const COMMON_ENDINGS = ["er", "i", "r", "ez", "s", "e", "ais", "ait", "ant", "t", "ment", "a", "eur", "euse", "ù", "isme", "é", "able", "ible", "u", "if", "ive"];
-const COMMON_PREFIXES = ["d", "e", "l", "en", "un", "re", "n", "c", "pre", "par", "s", "sous", "mal", "contre", "anti", "auto", "extra", "hyper", "inter", "mono"];
-const FRENCH_VOWELS = "aioue";
+// French Language Configuration
+const FRENCH_LANGUAGE_CONFIG = {
+    // Vowels with frequency weights
+    VOWELS: {
+        'e': 12,  // Most common in French
+        'a': 7,
+        'i': 6,
+        'o': 5,
+        'u': 3,
+        'y': 2    // Sometimes considered a vowel
+    },
+    
+    // Consonants with frequency weights
+    CONSONANTS: {
+        's': 8,   // Very common
+        'n': 7,
+        't': 7,
+        'r': 6,
+        'l': 6,
+        'd': 5,
+        'c': 5,
+        'm': 5,
+        'p': 4,
+        'g': 3,
+        'b': 3,
+        'v': 3,
+        'h': 2,
+        'f': 2,
+        'q': 1,
+        'j': 1,
+        'x': 1,
+        'z': 1,
+        'ç': 1,
+        'k': 0.5,  // Rare in French
+        'w': 0.5   // Rare in French
+    },
+    
+    // Common word parts
+    COMMON_ENDINGS: [
+        "er", "ir", "re", "ez", "ent", "ant", "tion", 
+        "ment", "age", "ois", "ais", "uit", "eur", "ien"
+    ],
+    
+    COMMON_PREFIXES: [
+        "re", "de", "in", "en", "em", "con", "com", 
+        "par", "sur", "sous", "entre", "trans", "anti"
+    ],
+    
+    // Special letter combinations
+    LIAISONS: [
+        "t", "z", "n", "s", "d", "x"  // Letters that often create liaisons
+    ],
+    
+    // Generate letter frequency distribution
+    getLetterFrequency() {
+        const frequency = {};
+        
+        // Add vowels with their weights
+        Object.entries(this.VOWELS).forEach(([vowel, weight]) => {
+            frequency[vowel] = weight;
+        });
+        
+        // Add consonants with their weights
+        Object.entries(this.CONSONANTS).forEach(([consonant, weight]) => {
+            frequency[consonant] = weight;
+        });
+        
+        return frequency;
+    },
+    
+    // Get random letters based on French frequency
+    getWeightedRandomLetters(count) {
+        const frequency = this.getLetterFrequency();
+        const letters = [];
+        const totalWeight = Object.values(frequency).reduce((a, b) => a + b, 0);
+        
+        // Ensure at least 35% vowels (French typically has 35-40% vowels)
+        const vowelCount = Math.max(2, Math.ceil(count * 0.35));
+        const consonantCount = count - vowelCount;
+        
+        // Helper function to get weighted random letter
+        const getWeightedLetter = (letterSet) => {
+            let random = Math.random() * totalWeight;
+            for (const [letter, weight] of Object.entries(frequency)) {
+                if (letterSet.includes(letter)) {
+                    random -= weight;
+                    if (random <= 0) return letter;
+                }
+            }
+            return 'e'; // Fallback to most common letter
+        };
+        
+        // Add vowels
+        for (let i = 0; i < vowelCount; i++) {
+            letters.push(getWeightedLetter(Object.keys(this.VOWELS)));
+        }
+        
+        // Add consonants
+        for (let i = 0; i < consonantCount; i++) {
+            letters.push(getWeightedLetter(Object.keys(this.CONSONANTS)));
+        }
+        
+        return letters;
+    }
+};
 
 // Initialize the game
 function init() {
@@ -367,43 +468,27 @@ function startGame() {
 
 // Generate letters that can form multiple valid words
 function generatePlayableLetters(count) {
-    const vowels = FRENCH_VOWELS;
-    const consonants = "bcdfghjklmnpqrstvwxzç";
-    let letters = [];
-    
-    // Ensure at least 40% vowels
-    const vowelCount = Math.max(2, Math.ceil(count * 0.4));
-    const consonantCount = count - vowelCount;
-    
-    // Add vowels
-    for (let i = 0; i < vowelCount; i++) {
-        letters.push(vowels[Math.floor(Math.random() * vowels.length)]);
-    }
-    
-    // Add consonants
-    for (let i = 0; i < consonantCount; i++) {
-        letters.push(consonants[Math.floor(Math.random() * consonants.length)]);
-    }
+    // Get weighted random letters respecting French frequencies
+    let letters = FRENCH_LANGUAGE_CONFIG.getWeightedRandomLetters(count - 2);
     
     // Add one common prefix or ending (30% chance)
     if (Math.random() < 0.3) {
-        const commonPart = Math.random() > 0.5 
-            ? COMMON_PREFIXES[Math.floor(Math.random() * COMMON_PREFIXES.length)]
-            : COMMON_ENDINGS[Math.floor(Math.random() * COMMON_ENDINGS.length)];
-        
-        for (let i = 0; i < commonPart.length && letters.length < count; i++) {
-            letters.push(commonPart[i]);
-        }
+        const commonParts = [...FRENCH_LANGUAGE_CONFIG.COMMON_PREFIXES, 
+                            ...FRENCH_LANGUAGE_CONFIG.COMMON_ENDINGS];
+        const commonPart = commonParts[Math.floor(Math.random() * commonParts.length)];
+        letters.push(...commonPart.split(''));
     }
     
     // Fill remaining slots if needed
     while (letters.length < count) {
-        const charSet = Math.random() > 0.5 ? vowels : consonants;
+        const charSet = Math.random() > 0.5 ? 
+            Object.keys(FRENCH_LANGUAGE_CONFIG.VOWELS) : 
+            Object.keys(FRENCH_LANGUAGE_CONFIG.CONSONANTS);
         letters.push(charSet[Math.floor(Math.random() * charSet.length)]);
     }
     
     // Shuffle the letters
-    return shuffleArray(letters);
+    return shuffleArray(letters).slice(0, count); // Ensure exact count
 }
 
 // Shuffle array
