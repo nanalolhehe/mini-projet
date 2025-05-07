@@ -61,7 +61,7 @@ const saveQuitBtn = document.getElementById('save-quit-btn');
 const FRENCH_LANGUAGE_CONFIG = {
     // Vowels with realistic frequency weights
     VOWELS: {
-        'e': 15,  // Most common in French (adjusted higher)
+        'e': 8,  // Most common in French (adjusted higher)
         'a': 8,
         'i': 7,
         'o': 5,
