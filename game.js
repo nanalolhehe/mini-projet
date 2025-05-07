@@ -61,7 +61,7 @@ const saveQuitBtn = document.getElementById('save-quit-btn');
 const FRENCH_LANGUAGE_CONFIG = {
     // Vowels with realistic frequency weights
     VOWELS: {
-        'e': 8,  // Most common in French (adjusted higher)
+        'e': 3,  
         'a': 8,
         'i': 7,
         'o': 5,
@@ -136,7 +136,7 @@ const FRENCH_LANGUAGE_CONFIG = {
                     if (random <= 0) return letter;
                 }
             }
-            return 'e'; // Fallback to most common letter
+            return 'e'; 
         };
         
         // Add vowels
