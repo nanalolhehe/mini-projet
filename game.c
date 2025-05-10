@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <emscripten.h>
 #include <string.h>
 #include <ctype.h>
 #include <time.h>
