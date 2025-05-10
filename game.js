@@ -61,7 +61,7 @@ const saveQuitBtn = document.getElementById('save-quit-btn');
 const FRENCH_LANGUAGE_CONFIG = {
     // Vowels with realistic frequency weights
     VOWELS: {
-        'e': 3,  
+        'e': 1,  
         'a': 8,
         'i': 7,
         'o': 5,
@@ -101,13 +101,13 @@ const FRENCH_LANGUAGE_CONFIG = {
     
     // Common word parts
     COMMON_ENDINGS: [
-        "er", "ir", "re", "ez", "ent", "ant", "tion", 
-        "ment", "age", "ois", "ais", "uit", "eur", "ien",
-        "ette", "ille", "ique", "isme", "able", "ance"
+        "er", "ir", "re", "z", "nt", "ant", "tion", 
+        "ment", "ag", "ois", "ais", "uit", "eur", "ien",
+        "tt", "ille", "ique", "isme", "able", "ance"
     ],
     
     COMMON_PREFIXES: [
-        "re", "de", "in", "en", "em", "con", "com", 
+        "r", "d", "in", "n", "m", "con", "com", 
         "par", "sur", "sous", "entre", "trans", "anti",
         "pré", "pro", "per", "super", "micro", "macro"
     ],
